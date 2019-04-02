@@ -19,6 +19,7 @@ public class ScreenPairStatement extends Statement{
 	
 	public static List<List<String>> grammars = new ArrayList<>();
 	static {
+		// A B 大 开
 		grammars.add(Keyword.getWords(Keyword.VAR, Keyword.VAR, Keyword.BIG, Keyword.OPEN));
 		grammars.add(Keyword.getWords(Keyword.VAR, Keyword.VAR, Keyword.MID, Keyword.OPEN));
 		grammars.add(Keyword.getWords(Keyword.VAR, Keyword.VAR, Keyword.SMALL, Keyword.OPEN));

@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import theaterengine.script.Parser;
 import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;
+import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.statement.ScreenPairStatement;
 
 /**
@@ -36,15 +37,15 @@ import theaterengine.script.statement.ScreenPairStatement;
  */
 public class Stage extends JFrame{
 	
-	private final int positionZeroX;
-	private final int positionZeroY;
+	public static int positionZeroX;
+	public static int positionZeroY;
 	private final double rate = 100; 
 	
 	public static StagePanel stagePanel;
 	
 	public Stage(int width, Integer height, int positionZeroX, int positionZeroY) {
-		this.positionZeroX = positionZeroX;
-		this.positionZeroY = positionZeroY;
+		Stage.positionZeroX = positionZeroX;
+		Stage.positionZeroY = positionZeroY;
 		
 		setTitle("Java 第一个 GUI 程序");    //设置显示窗口标题
 		setSize(width, height);    //设置窗口显示尺寸
@@ -56,16 +57,10 @@ public class Stage extends JFrame{
         setVisible(true);    //设置窗口是否可见
         
         ItemFactory.registerRole(new Role("成濑", positionZeroX, positionZeroY));
-        int screenWidth = 200;
-        ScreenFactory.register(new Screen("A", positionZeroX - screenWidth/2, positionZeroY/2, screenWidth));
-        ScreenFactory.register(new Screen("B", positionZeroX + screenWidth/2, positionZeroY/2, screenWidth));
-
         stagePanel.addRole(ItemFactory.getRole("成濑"));
-        stagePanel.addStageScreen(ScreenFactory.get("A"));
-        stagePanel.addStageScreen(ScreenFactory.get("B"));
         
         
-        Parser parser = new Parser();
+        
         
         String file = "play.txt";
         Path path = Paths.get(file);
@@ -77,37 +72,13 @@ public class Stage extends JFrame{
 			docs = new ArrayList<>();
 		}
         
-        
+        Parser parser = new Parser();
 		parser.registerGrammars(ScreenPairStatement.grammars, StatementType.SCREEN_PAIR_MOVE);
 		parser.registerGrammars(DelayStatement.grammars, StatementType.DELAY);
-        
+		parser.registerGrammars(ScreenCreateStatement.grammars, StatementType.SCREEN_CTEATE);
 		
-		Scence scence = new Scence();
-		int delay = 0;
-        for (int i = 0; i < docs.size(); i++) {
-        	String script = docs.get(i);
-        	String[] args = script.split(" ");
-        	StatementType type = parser.parse(args);
-        	switch (type) {
-			case SCREEN_PAIR_MOVE:
-				ScreenPairStatement screenPairStatement = new ScreenPairStatement(args);
-		        scence.addMovementActions(screenPairStatement.toMoveActions(delay));
-				break;
-			case DELAY:
-				DelayStatement delayStatement = new DelayStatement(args);
-				delay += delayStatement.getDelay();
-				break;
-			default:
-				break;
-			}
-        }
-          
-        
-        
-//        scence.addMovementAction(new MovementAction(stagePanel, screenA, -10, 0, 20, 0));
-//        scence.addMovementAction(new MovementAction(stagePanel, screenB, +10, 0, 20, 0));
-//        scence.addMovementAction(new MovementAction(stagePanel, screenA, +10, 0, 20, 2000));
-//        scence.addMovementAction(new MovementAction(stagePanel, screenB, -10, 0, 20, 2000));
+		Scence scence = new Scence(docs, parser);
+		
         scence.start();
 	}
 	
@@ -121,18 +92,6 @@ public class Stage extends JFrame{
 		
 		public static void registerRole(Role role) {
 			roles.put(role.name, role);
-		}
-	}
-	
-	
-	class ScenceBuilder{
-		Scence scence = new Scence();
-		public void append(String code) {
-			List<String> args = Arrays.asList(code.split(" "));
-			
-			if (args.contains("打开")) {
-				
-			}
 		}
 	}
 	
@@ -155,7 +114,7 @@ public class Stage extends JFrame{
         	roles.add(role);
 		}
         
-        public void addStageScreen(Screen stageScreen) {
+        public void addScreen(Screen stageScreen) {
         	stageScreens.add(stageScreen);
 		}
         
@@ -217,12 +176,14 @@ public class Stage extends JFrame{
             g2d.setFont(gridFont);
             
 			for (int x = space ; x < stage.getWidth(); x += space) {
+				int xx =  x - positionZeroX;
 				g2d.drawLine(x, 0, x, stage.getHeight());
-				g2d.drawString(String.valueOf(x), x, gridFont.getSize());
+				g2d.drawString(String.valueOf(xx), x + 5, gridFont.getSize());
 			}
 			for (int y = space ; y < stage.getHeight(); y += space) {
+				int yy = y - positionZeroY;
 				g2d.drawLine(0, y, stage.getWidth(), y);
-				g2d.drawString(String.valueOf(y), 0, y);
+				g2d.drawString(String.valueOf(yy), 0, y);
 			}
 		}
 

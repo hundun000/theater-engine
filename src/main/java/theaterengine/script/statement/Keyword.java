@@ -10,6 +10,15 @@ import java.util.List;
  */
 public enum Keyword {
 	
+	CREATE_SCREEN("创建幕布", null),
+	WIDTH("宽", null),
+	
+	FORWARD("向前", new Integer(-1)),
+	BACKWARD("向后", new Integer(1)),
+	
+	LEFT("向左", new Integer(-1)),
+	RIGHT("向右", new Integer(1)),
+	
 	BIG("大", new Integer(30)),
 	MID("中", new Integer(20)),
 	SMALL("小", new Integer(10)),

@@ -10,5 +10,4 @@ import java.util.List;
  */
 public abstract class Statement {
 	abstract List<List<String>> getGrammers();
-
 }

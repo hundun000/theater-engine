@@ -26,7 +26,8 @@ public class ScreenFactory {
 		return sceens.get(name);
 	}
 	
-	public static void register(Screen screen) {
+	public static void registerAndAddToStage(Screen screen) {
 		sceens.put(screen.name, screen);
+		Stage.stagePanel.addScreen(screen);
 	}
 }

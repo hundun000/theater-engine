@@ -7,6 +7,7 @@ package theaterengine.script;
 public enum StatementType {
 	
 	SCREEN_PAIR_MOVE,
-	DELAY
+	DELAY, 
+	SCREEN_CTEATE;
 
 }
