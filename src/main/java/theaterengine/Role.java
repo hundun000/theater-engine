@@ -9,7 +9,7 @@ import theaterengine.script.tool.ScalaTool;
  */
 public class Role extends MoveableItem{
 	
-	public Role(String name, int x, int y) {
+	public Role(String name, double x, double y) {
 		super(name, x, y);
 	}
 

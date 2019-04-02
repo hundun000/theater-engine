@@ -44,18 +44,21 @@ public class RoleMoveStatement extends Statement{
 		return grammars;
 	}
 	
-	String[] args;
+	
+	String argName;
+	String argSpeed;
+	String argDirection;
+	String argDistance;
+	
 	public RoleMoveStatement(String[] args) {
-		this.args = args;
+		argName = args[0];
+		argSpeed = args[1];
+		argDirection = args[2];
+		argDistance = args[3];
 	}
 	
 	public List<MovementAction> toMoveActions(int delay, StagePanel stagePanel) {
 		List<MovementAction> moveActions = new ArrayList<>();
-		
-		String argName = args[0];
-		String argSpeed = args[1];
-		String argDirection = args[2];
-		String argDisplacement = args[3];
 				
 		Role role = RoleFactory.get(argName);
 		
@@ -63,7 +66,7 @@ public class RoleMoveStatement extends Statement{
 		double speedY;
 		int times;
 		
-		double displacement = Keyword.get(argDirection).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(argDisplacement));
+		double displacement = Keyword.get(argDirection).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(argDistance));
 		switch (Keyword.get(argDirection)) {
 		case FORWARD:
 		case BACKWARD:
@@ -78,12 +81,12 @@ public class RoleMoveStatement extends Statement{
 			times = (int) (displacement / speedX);
 			break;	
 		default:
-			logger.error("Keyword.get({})未定义行为", args[2]);
+			logger.error("Keyword.get({})未定义行为", argDirection);
 			return null;
 		}
 		
 		
-		moveActions.add(new MovementAction(stagePanel, role, speedX, 0, times, delay));
+		moveActions.add(new MovementAction(stagePanel, role, speedX, speedY, times, delay));
 		return moveActions;
 	}
 

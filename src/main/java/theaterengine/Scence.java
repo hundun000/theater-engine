@@ -14,6 +14,7 @@ import theaterengine.script.Parser;
 import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;
 import theaterengine.script.statement.Keyword;
+import theaterengine.script.statement.RoleCreateStatement;
 import theaterengine.script.statement.RoleMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.statement.ScreenPairMoveStatement;
@@ -29,8 +30,6 @@ public class Scence extends Timer{
 	List<MovementAction> movementActions = new ArrayList<>();
 	
 	public Scence(StagePanel stagePanel, List<String> docs, Parser parser) {
-		
-		RoleFactory.registerAndAddToStage(new Role("成濑", Stage.positionZeroX, Stage.positionZeroY), stagePanel);
 		
 		int delay = 0;
         for (int i = 0; i < docs.size(); i++) {
@@ -61,7 +60,10 @@ public class Scence extends Timer{
 				ScreenCreateStatement screenCreateStatement = new ScreenCreateStatement(items);
 				screenCreateStatement.work(stagePanel);
 				break;
-			
+			case ROLE_CTEATE:
+				RoleCreateStatement roleCreateStatement = new RoleCreateStatement(items);
+				roleCreateStatement.work(stagePanel);
+				break;
 			default:
 				logger.error("未定义语句行为：{}", type);
 				break;

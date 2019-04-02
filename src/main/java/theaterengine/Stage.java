@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import theaterengine.script.Parser;
 import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;
+import theaterengine.script.statement.RoleCreateStatement;
 import theaterengine.script.statement.RoleMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.statement.ScreenPairMoveStatement;
@@ -93,7 +94,7 @@ public class Stage extends JFrame{
 		buttonRun.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				List<String> docs = Arrays.asList(textAreaCode.getText().split(System.lineSeparator()));
+				List<String> docs = Arrays.asList(textAreaCode.getText().split("\n"));
 				restart(docs);
             }
 		});
@@ -104,7 +105,7 @@ public class Stage extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					FileTool.saveTxtFile("output.txt", textAreaCode.getText());
+					FileTool.saveTxtFile(filename, textAreaCode.getText().replaceAll("\n", System.lineSeparator()));
 				} catch (IOException e1) {
 					logger.error("写文件失败");
 					e1.printStackTrace();
@@ -127,6 +128,7 @@ public class Stage extends JFrame{
 		getContentPane().add(panelEdit);
         
         setSize(width + panelEditWidth + 30, height + 50);    //设置窗口显示尺寸
+        setLocationRelativeTo(null);
         
         setVisible(true);    //设置窗口是否可见
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,6 +146,7 @@ public class Stage extends JFrame{
 		parser.registerGrammars(DelayStatement.grammars, StatementType.DELAY);
 		parser.registerGrammars(ScreenCreateStatement.grammars, StatementType.SCREEN_CTEATE);
 		parser.registerGrammars(RoleMoveStatement.grammars, StatementType.ROLE_MOVE);
+		parser.registerGrammars(RoleCreateStatement.grammars, StatementType.ROLE_CTEATE);
 		
 		
 		
@@ -154,7 +157,7 @@ public class Stage extends JFrame{
 	        StringBuilder builder = new StringBuilder();
 	        String line;
 	        while ((line = bufferedReader.readLine()) != null) {
-	        	builder.append(line).append(System.lineSeparator());
+	        	builder.append(line).append("\n");
 	        }
 	        textAreaCode.setText(builder.toString());
 	        bufferedReader.close();

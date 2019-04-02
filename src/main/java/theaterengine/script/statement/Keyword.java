@@ -11,6 +11,8 @@ import java.util.List;
 public enum Keyword {
 	COMMENT("//", null),
 	
+	CREATE_ROLE("创建角色", null),
+	
 	CREATE_SCREEN("创建幕布", null),
 	WIDTH("宽", null),
 	
@@ -21,9 +23,9 @@ public enum Keyword {
 	RIGHT("向右", new Integer(1)),
 	
 	// m/s
-	ROLE_FAST_SPEED("快速", new Double(2)),
-	ROLE_MID_SPEED("中速", new Double(1)),
-	ROLE_SLOW_SPEED("慢速", new Double(0.5)),
+	ROLE_FAST_SPEED("快速", new Double(4)),
+	ROLE_MID_SPEED("中速", new Double(2)),
+	ROLE_SLOW_SPEED("慢速", new Double(1)),
 	
 	// m/s
 	FAST_SPEED("快速", new Integer(4)),

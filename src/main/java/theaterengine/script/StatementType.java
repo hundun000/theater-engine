@@ -9,6 +9,7 @@ public enum StatementType {
 	SCREEN_PAIR_MOVE,
 	DELAY, 
 	SCREEN_CTEATE, 
-	ROLE_MOVE;
+	ROLE_MOVE, 
+	ROLE_CTEATE;
 
 }
