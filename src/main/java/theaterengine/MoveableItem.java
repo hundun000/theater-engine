@@ -12,18 +12,18 @@ import javax.sound.midi.Instrument;
 public class MoveableItem {
 	
 	final String name;
-	int x;
-	int y;
+	double x;
+	double y;
 	
-	public MoveableItem(String name, int x, int y) {
+	public MoveableItem(String name, double x, double y) {
 		this.name = name;
 		this.x = x;
 		this.y = y;
 	}
 	
-	void move(int dx, int dy) {
-		x += dx;
-		y += dy;
+	void move(double speedX, double speedY) {
+		x += speedX;
+		y += speedY;
 	}
 	
 }

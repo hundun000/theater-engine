@@ -1,4 +1,7 @@
 package theaterengine;
+
+import theaterengine.script.tool.ScalaTool;
+
 /**
  *
  * @author hundun
@@ -10,7 +13,7 @@ public class Role extends MoveableItem{
 		super(name, x, y);
 	}
 
-	public static final int radius = 20;
+	public static final int radius = (int) ScalaTool.meterToPixel(0.3);
 	
 	
 

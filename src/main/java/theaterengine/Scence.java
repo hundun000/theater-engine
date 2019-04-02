@@ -10,12 +10,13 @@ import org.checkerframework.checker.units.qual.m;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import theaterengine.Stage.StagePanel;
 import theaterengine.script.Parser;
 import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;
+import theaterengine.script.statement.Keyword;
+import theaterengine.script.statement.RoleMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
-import theaterengine.script.statement.ScreenPairStatement;
+import theaterengine.script.statement.ScreenPairMoveStatement;
 
 /**
  *
@@ -26,23 +27,31 @@ public class Scence extends Timer{
 	private static final Logger logger = LoggerFactory.getLogger(Scence.class);
 
 	List<MovementAction> movementActions = new ArrayList<>();
-	long delay = 0;
 	
-	boolean done = false;
-	int times = 0;
-	private long period = 100;
-	
-	public Scence(List<String> docs, Parser parser) {
+	public Scence(StagePanel stagePanel, List<String> docs, Parser parser) {
+		
+		RoleFactory.registerAndAddToStage(new Role("成濑", Stage.positionZeroX, Stage.positionZeroY), stagePanel);
 		
 		int delay = 0;
         for (int i = 0; i < docs.size(); i++) {
         	String line = docs.get(i);
         	String[] items = getItemsByScript(line);
+        	if (items == null || items.length == 0) {
+        		continue;
+        	}
         	StatementType type = parser.parse(items);
+        	if (type == null) {
+        		logger.warn("第{}行 语法错误：{}", i, line);
+        		continue;
+        	}
         	switch (type) {
+        	case ROLE_MOVE:
+				RoleMoveStatement roleMoveStatement = new RoleMoveStatement(items);
+		        addMovementActions(roleMoveStatement.toMoveActions(delay, stagePanel));
+				break;
 			case SCREEN_PAIR_MOVE:
-				ScreenPairStatement screenPairStatement = new ScreenPairStatement(items);
-		        addMovementActions(screenPairStatement.toMoveActions(delay));
+				ScreenPairMoveStatement screenPairStatement = new ScreenPairMoveStatement(items);
+		        addMovementActions(screenPairStatement.toMoveActions(delay, stagePanel));
 				break;
 			case DELAY:
 				DelayStatement delayStatement = new DelayStatement(items);
@@ -50,10 +59,11 @@ public class Scence extends Timer{
 				break;
 			case SCREEN_CTEATE:
 				ScreenCreateStatement screenCreateStatement = new ScreenCreateStatement(items);
-				screenCreateStatement.work();
+				screenCreateStatement.work(stagePanel);
 				break;
+			
 			default:
-				logger.warn("第{}行 语法错误：{}", i, line);
+				logger.error("未定义语句行为：{}", type);
 				break;
 			}
         }
@@ -61,6 +71,9 @@ public class Scence extends Timer{
 	
 	private String[] getItemsByScript(String line) {
 		line.trim();
+		if(line.startsWith(Keyword.COMMENT.getWord())) {
+			return null;
+		}
 		String[] items = line.split(" ");
 		List<String> list = new ArrayList<>();
 		for (String item : items) {
@@ -88,7 +101,7 @@ public class Scence extends Timer{
 	
 	public void start() {
 		for (MovementAction action : movementActions) {
-			schedule(action, action.delay, period);
+			schedule(action, action.delay, MovementAction.period);
 		}
 	}
 

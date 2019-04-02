@@ -85,6 +85,9 @@ public class Parser {
 		}
 		
 		public StatementType parse(String[] inputs) {
+			if (inputs == null) {
+				return null;
+			}
 			if (inputs.length > 0) {
 				String first = inputs[0];
 				String[] remain = Arrays.copyOfRange(inputs, 1, inputs.length);

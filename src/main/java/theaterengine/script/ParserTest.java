@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import theaterengine.script.statement.ScreenPairStatement;
+import theaterengine.script.statement.ScreenPairMoveStatement;
 
 /**
  *
@@ -16,7 +16,7 @@ public class ParserTest {
 	@Test
 	public void test() {
 		Parser parser = new Parser();
-		parser.registerGrammars(ScreenPairStatement.grammars, StatementType.SCREEN_PAIR_MOVE);
+		parser.registerGrammars(ScreenPairMoveStatement.grammars, StatementType.SCREEN_PAIR_MOVE);
 		System.out.println(parser.parse("A B 大 开".split(" ")));
 	}
 

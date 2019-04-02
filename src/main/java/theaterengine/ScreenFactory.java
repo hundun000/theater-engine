@@ -21,13 +21,13 @@ public class ScreenFactory {
 	public static Screen get(String name) {
 		Screen screen = sceens.get(name);
 		if (screen == null) {
-			logger.warn("ScreenFactory未取到:{}", name);
+			logger.warn("Screen未取到:{}", name);
 		}
 		return sceens.get(name);
 	}
 	
-	public static void registerAndAddToStage(Screen screen) {
+	public static void registerAndAddToStage(Screen screen, StagePanel stagePanel) {
 		sceens.put(screen.name, screen);
-		Stage.stagePanel.addScreen(screen);
+		stagePanel.addScreen(screen);
 	}
 }

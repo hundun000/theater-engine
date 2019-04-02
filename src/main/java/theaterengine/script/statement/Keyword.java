@@ -9,6 +9,7 @@ import java.util.List;
  * Created on 2019/04/01
  */
 public enum Keyword {
+	COMMENT("//", null),
 	
 	CREATE_SCREEN("创建幕布", null),
 	WIDTH("宽", null),
@@ -19,15 +20,26 @@ public enum Keyword {
 	LEFT("向左", new Integer(-1)),
 	RIGHT("向右", new Integer(1)),
 	
-	BIG("大", new Integer(30)),
-	MID("中", new Integer(20)),
-	SMALL("小", new Integer(10)),
+	// m/s
+	ROLE_FAST_SPEED("快速", new Double(2)),
+	ROLE_MID_SPEED("中速", new Double(1)),
+	ROLE_SLOW_SPEED("慢速", new Double(0.5)),
 	
-	OPEN("开", new Integer(-1)),
-	CLOSE("关", new Integer(1)),
+	// m/s
+	FAST_SPEED("快速", new Integer(4)),
+	MID_SPEED("中速", new Integer(2)),
+	SLOW_SPEED("慢速", new Integer(1)),
+	
+	BIG_OPEN("大开", new Integer(-300)),
+	MID_OPEN("中开", new Integer(-200)),
+	SMALL_OPEN("小开", new Integer(-100)),
+	
+	BIG_CLOSE("大关", new Integer(300)),
+	MID_CLOSE("中关", new Integer(200)),
+	SMALL_CLOSE("小关", new Integer(100)),
 	
 	DELAY("延时", null),
-	VAR("var", null);
+	VAR("", null);
 	
 	private String word;
 	private Object value;
@@ -43,6 +55,10 @@ public enum Keyword {
 	
 	public int getIntValue() {
 		return (Integer) value;
+	}
+	
+	public double getDoubleValue() {
+		return (double) value;
 	}
 	
 	public static Keyword get(String word) {

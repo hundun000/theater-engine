@@ -9,10 +9,10 @@ import com.google.common.util.concurrent.RateLimiter;
  */
 public class ScalaTool {
 	
-	private static int rate = 100;
+	private static int rate = 50;
 	
-	public static int meterToPixel(double n) {
-		return (int) (n * rate);
+	public static double meterToPixel(double n) {
+		return n * rate;
 	}
 	
 	public static double pixelToMeter(int n) {
