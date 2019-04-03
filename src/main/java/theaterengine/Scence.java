@@ -15,7 +15,8 @@ import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;
 import theaterengine.script.statement.Keyword;
 import theaterengine.script.statement.RoleCreateStatement;
-import theaterengine.script.statement.RoleMoveStatement;
+import theaterengine.script.statement.RoleOneDirectionMoveStatement;
+import theaterengine.script.statement.RoleTwoDirectionMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.statement.ScreenPairMoveStatement;
 
@@ -44,9 +45,13 @@ public class Scence extends Timer{
         		continue;
         	}
         	switch (type) {
-        	case ROLE_MOVE:
-				RoleMoveStatement roleMoveStatement = new RoleMoveStatement(items);
-		        addMovementActions(roleMoveStatement.toMoveActions(delay, stagePanel));
+        	case ROLE_ONE_DIRECTION_MOVE:
+				RoleOneDirectionMoveStatement roleMoveStatement = new RoleOneDirectionMoveStatement(items);
+				addMovementActions(roleMoveStatement.toMoveActions(delay + roleMoveStatement.getDelay(), stagePanel));
+				break;
+        	case ROLE_TWO_DIRECTION_MOVE:
+				RoleTwoDirectionMoveStatement roleTwoDirectionMoveStatement = new RoleTwoDirectionMoveStatement(items);
+				addMovementActions(roleTwoDirectionMoveStatement.toMoveActions(delay + roleTwoDirectionMoveStatement.getDelay(), stagePanel));
 				break;
 			case SCREEN_PAIR_MOVE:
 				ScreenPairMoveStatement screenPairStatement = new ScreenPairMoveStatement(items);
@@ -103,7 +108,7 @@ public class Scence extends Timer{
 	
 	public void start() {
 		for (MovementAction action : movementActions) {
-			schedule(action, action.delay, MovementAction.period);
+			scheduleAtFixedRate(action, action.delay, MovementAction.period);
 		}
 	}
 

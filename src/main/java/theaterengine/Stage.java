@@ -43,7 +43,8 @@ import theaterengine.script.Parser;
 import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;
 import theaterengine.script.statement.RoleCreateStatement;
-import theaterengine.script.statement.RoleMoveStatement;
+import theaterengine.script.statement.RoleOneDirectionMoveStatement;
+import theaterengine.script.statement.RoleTwoDirectionMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.statement.ScreenPairMoveStatement;
 import theaterengine.script.tool.FileTool;
@@ -145,8 +146,9 @@ public class Stage extends JFrame{
 		parser.registerGrammars(ScreenPairMoveStatement.grammars, StatementType.SCREEN_PAIR_MOVE);
 		parser.registerGrammars(DelayStatement.grammars, StatementType.DELAY);
 		parser.registerGrammars(ScreenCreateStatement.grammars, StatementType.SCREEN_CTEATE);
-		parser.registerGrammars(RoleMoveStatement.grammars, StatementType.ROLE_MOVE);
 		parser.registerGrammars(RoleCreateStatement.grammars, StatementType.ROLE_CTEATE);
+		parser.registerGrammars(RoleOneDirectionMoveStatement.grammars, StatementType.ROLE_ONE_DIRECTION_MOVE);
+		parser.registerGrammars(RoleTwoDirectionMoveStatement.grammars, StatementType.ROLE_TWO_DIRECTION_MOVE);
 		
 		
 		
@@ -187,7 +189,7 @@ public class Stage extends JFrame{
 	
 	
 	public static void main(String[] args) {
-		new Stage((int)ScalaTool.meterToPixel(18), (int)ScalaTool.meterToPixel(8), (int)ScalaTool.meterToPixel(9), (int)ScalaTool.meterToPixel(5));
+		new Stage((int)ScalaTool.meterToPixel(18), (int)ScalaTool.meterToPixel(8), (int)ScalaTool.meterToPixel(9), (int)ScalaTool.meterToPixel(4));
 	}
 
 }

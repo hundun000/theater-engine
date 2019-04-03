@@ -6,6 +6,7 @@ package theaterengine.script.statement;
  */
 
 import java.awt.RenderingHints.Key;
+import java.nio.channels.ScatteringByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,8 +24,8 @@ import theaterengine.Stage;
 import theaterengine.StagePanel;
 import theaterengine.script.tool.ScalaTool;
 
-public class RoleMoveStatement extends Statement{
-	private static final Logger logger = LoggerFactory.getLogger(RoleMoveStatement.class);
+public class RoleOneDirectionMoveStatement extends Statement{
+	private static final Logger logger = LoggerFactory.getLogger(RoleOneDirectionMoveStatement.class);
 	
 	
 	public static List<List<String>> grammars = new ArrayList<>();
@@ -35,6 +36,7 @@ public class RoleMoveStatement extends Statement{
 			for (Keyword direction : directions) {
 				// 哈姆雷特 中速 向前 2
 				grammars.add(Keyword.getWords(Keyword.VAR, speed, direction, Keyword.VAR));
+				grammars.add(Keyword.getWords(Keyword.ROLE_DELAY, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR));
 			}
 		}
 	}
@@ -47,47 +49,65 @@ public class RoleMoveStatement extends Statement{
 	
 	String argName;
 	String argSpeed;
-	String argDirection;
-	String argDistance;
+	String argDirection1;
+	String argDistance1;
+	String argDelay;
 	
-	public RoleMoveStatement(String[] args) {
-		argName = args[0];
-		argSpeed = args[1];
-		argDirection = args[2];
-		argDistance = args[3];
+	public RoleOneDirectionMoveStatement(String[] args) {
+		super(args);
+		
+		if (args.length == 6) {
+			argName = args[2];
+			argSpeed = args[3];
+			argDirection1 = args[4];
+			argDistance1 = args[5];
+			argDelay = args[1];
+		} else {
+			argName = args[0];
+			argSpeed = args[1];
+			argDirection1 = args[2];
+			argDistance1 = args[3];
+			argDelay = "0";
+		}
 	}
 	
 	public List<MovementAction> toMoveActions(int delay, StagePanel stagePanel) {
 		List<MovementAction> moveActions = new ArrayList<>();
 				
 		Role role = RoleFactory.get(argName);
-		
+		int times;
 		double speedX;
 		double speedY;
-		int times;
+		double speedResultant = ScalaTool.meterToPixel(Keyword.get(argSpeed).getDoubleValue()) / MovementAction.frequency;
 		
-		double displacement = Keyword.get(argDirection).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(argDistance));
-		switch (Keyword.get(argDirection)) {
+		
+		double distance = ScalaTool.getSignedDistanceInPixel(argDirection1, argDistance1);
+		times = (int) Math.abs((distance / speedResultant));
+		switch (Keyword.get(argDirection1)) {
 		case FORWARD:
 		case BACKWARD:
 			speedX = 0;
-			speedY = Keyword.get(argDirection).getIntValue() * ScalaTool.meterToPixel(Keyword.get(argSpeed).getDoubleValue()) / MovementAction.frequency;
-			times = (int) (displacement / speedY);
+			speedY = (distance > 0 ? 1 : -1) * speedResultant;
 			break;
 		case LEFT:
 		case RIGHT:
+			speedX = (distance > 0 ? 1 : -1) * speedResultant;
 			speedY = 0;
-			speedX = Keyword.get(argDirection).getIntValue() * ScalaTool.meterToPixel(Keyword.get(argSpeed).getDoubleValue()) / MovementAction.frequency;
-			times = (int) (displacement / speedX);
 			break;	
 		default:
-			logger.error("Keyword.get({})未定义行为", argDirection);
-			return null;
+			speedX = 0;
+			speedY = 0;
+			logger.error("Keyword.get({})未定义行为", argDirection1);
 		}
-		
+
 		
 		moveActions.add(new MovementAction(stagePanel, role, speedX, speedY, times, delay));
 		return moveActions;
 	}
+	
+	public int getDelay() {
+		return (int) (Double.parseDouble(argDelay) * 1000);
+	}
+	
 
 }

@@ -46,6 +46,7 @@ public class RoleCreateStatement extends Statement {
 	String argDistanceX;
 	
 	public RoleCreateStatement(String[] args) {
+		super(args);
 		argName = args[1];
 		argDirectionY = args[2];
 		argDistanceY = args[3];
@@ -63,6 +64,7 @@ public class RoleCreateStatement extends Statement {
 		
 		
 		RoleFactory.registerAndAddToStage(new Role(argName, x, y), stagePanel);
+		stagePanel.updateUI();
 	}
 
 }

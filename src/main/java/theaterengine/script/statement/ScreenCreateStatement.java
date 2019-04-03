@@ -32,6 +32,7 @@ public class ScreenCreateStatement extends Statement {
 	
 	String[] args;
 	public ScreenCreateStatement(String[] args) {
+		super(args);
 		this.args = args;
 	}
 	
@@ -46,6 +47,7 @@ public class ScreenCreateStatement extends Statement {
 		
 		
 		ScreenFactory.registerAndAddToStage(new Screen(name, x, y, screenWidth), stagePanel);
+		stagePanel.updateUI();
 	}
 
 }

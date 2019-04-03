@@ -7,7 +7,8 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import theaterengine.script.statement.RoleMoveStatement;
+
+import theaterengine.script.statement.RoleOneDirectionMoveStatement;
 
 /**
  *
@@ -17,7 +18,7 @@ import theaterengine.script.statement.RoleMoveStatement;
 public class MovementAction extends TimerTask{
 	private static final Logger logger = LoggerFactory.getLogger(MovementAction.class);
 	
-	public static final int period = 100;
+	public static final int period = 10;
 	public static final int frequency = 1000 / period;
 	
 	MoveableItem mover;
@@ -37,25 +38,30 @@ public class MovementAction extends TimerTask{
 		this.times = times;
 		this.delay = delay;
 	}
+	
+	@Override
+	public String toString() {
+		return "mover=" + mover.name + ",speedX=" + speedX + ",speedY=" + speedY + ",times=" + times;
+	}
 
 	@Override
 	public void run() {
 		if(work) {
-//			double x0 = mover.x;
-//			double y0 = mover.y;
+			double x0 = mover.x;
+			double y0 = mover.y;
 			mover.move(speedX, speedY);
-//			double x1 = mover.x;
-//			double y1 = mover.y;
-//			logger.info("{}从({},{})移动到({},{})", new Object[]{mover.name, String.valueOf(x0), String.valueOf(y0), String.valueOf(x1), String.valueOf(y1)});
+			double x1 = mover.x;
+			double y1 = mover.y;
+			//logger.info("{} {}从({},{})移动到({},{})", new Object[]{System.currentTimeMillis(), mover.name, String.valueOf(x0), String.valueOf(y0), String.valueOf(x1), String.valueOf(y1)});
 			times --;
 			work = times > 0;
-			stagePanel.updateUI();
 		} else {
 			if (timer != null) {
 				timer.cancel();
 				System.out.println("最后一个action执行完毕");
 			}
 		}
+		stagePanel.updateUI();
 	}
 	
 

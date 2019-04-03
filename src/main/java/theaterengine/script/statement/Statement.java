@@ -1,6 +1,7 @@
 package theaterengine.script.statement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,4 +11,14 @@ import java.util.List;
  */
 public abstract class Statement {
 	abstract List<List<String>> getGrammers();
+	
+	private String string;
+	public Statement(String[] args) {
+		string = Arrays.toString(args);
+	}
+	
+	@Override
+	public String toString() {
+		return string;
+	}
 }

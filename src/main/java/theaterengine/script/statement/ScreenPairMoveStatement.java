@@ -41,6 +41,7 @@ public class ScreenPairMoveStatement extends Statement{
 	
 	String[] args;
 	public ScreenPairMoveStatement(String[] args) {
+		super(args);
 		this.args = args;
 	}
 	
@@ -51,8 +52,8 @@ public class ScreenPairMoveStatement extends Statement{
 		Screen screenR = ScreenFactory.get(args[1]);
 		
 		double speedX;
-		int leftDx;
-		leftDx = Keyword.get(args[3]).getIntValue();
+		double leftDx;
+		leftDx = ScalaTool.meterToPixel(Keyword.get(args[3]).getDoubleValue());
 		speedX = (leftDx > 0 ? 1 : -1) * ScalaTool.meterToPixel(Keyword.get(args[2]).getDoubleValue()) / MovementAction.frequency;
 		
 		

@@ -2,6 +2,9 @@ package theaterengine.script.tool;
 
 import com.google.common.util.concurrent.RateLimiter;
 
+import theaterengine.MovementAction;
+import theaterengine.script.statement.Keyword;
+
 /**
  *
  * @author hundun
@@ -19,4 +22,7 @@ public class ScalaTool {
 		return n * 1.0 / rate;
 	}
 
+	public static double getSignedDistanceInPixel(String argDirection, String argDistance) {
+		return Keyword.get(argDirection).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(argDistance));
+	}
 }

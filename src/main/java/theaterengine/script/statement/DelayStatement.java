@@ -23,10 +23,11 @@ public class DelayStatement extends Statement{
 	
 	String[] args;
 	public DelayStatement(String[] args) {
+		super(args);
 		this.args = args;
 	}
 	
 	public int getDelay() {
-		return Integer.parseInt(args[1]);
+		return (int) (Double.parseDouble(args[1]) * 1000);
 	}
 }

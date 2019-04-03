@@ -16,6 +16,8 @@ public enum Keyword {
 	CREATE_SCREEN("创建幕布", null),
 	WIDTH("宽", null),
 	
+	NO_DIRECTION("原地", new Integer(0)),
+	
 	FORWARD("向前", new Integer(-1)),
 	BACKWARD("向后", new Integer(1)),
 	
@@ -28,18 +30,19 @@ public enum Keyword {
 	ROLE_SLOW_SPEED("慢速", new Double(1)),
 	
 	// m/s
-	FAST_SPEED("快速", new Integer(4)),
-	MID_SPEED("中速", new Integer(2)),
-	SLOW_SPEED("慢速", new Integer(1)),
+	FAST_SPEED("快速", new Double(1.5)),
+	MID_SPEED("中速", new Double(1)),
+	SLOW_SPEED("慢速", new Double(0.5)),
 	
-	BIG_OPEN("大开", new Integer(-300)),
-	MID_OPEN("中开", new Integer(-200)),
-	SMALL_OPEN("小开", new Integer(-100)),
+	BIG_OPEN("大开", new Double(-1.5)),
+	MID_OPEN("中开", new Double(-1)),
+	SMALL_OPEN("小开", new Double(-0.5)),
 	
-	BIG_CLOSE("大关", new Integer(300)),
-	MID_CLOSE("中关", new Integer(200)),
-	SMALL_CLOSE("小关", new Integer(100)),
+	BIG_CLOSE("大关", new Double(1.5)),
+	MID_CLOSE("中关", new Double(1)),
+	SMALL_CLOSE("小关", new Double(0.5)),
 	
+	ROLE_DELAY("等待", null),
 	DELAY("延时", null),
 	VAR("", null);
 	
