@@ -12,9 +12,11 @@ import java.util.List;
 public abstract class Statement {
 	abstract List<List<String>> getGrammers();
 	
+	protected String[] args;
 	private String string;
 	public Statement(String[] args) {
-		string = Arrays.toString(args);
+	    this.string = Arrays.toString(args);
+		this.args = args;
 	}
 	
 	@Override

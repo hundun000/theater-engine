@@ -44,7 +44,11 @@ public enum Keyword {
 	
 	ROLE_DELAY("等待", null),
 	DELAY("延时", null),
-	VAR("", null);
+	VAR("", null),
+	
+	THEN("然后宣布", null),
+	WHEN("等到", null),
+	;
 	
 	private String word;
 	private Object value;

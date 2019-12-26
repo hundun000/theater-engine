@@ -14,6 +14,7 @@ public class DelayStatement extends Statement{
 	public static List<List<String>> grammars = new ArrayList<>();
 	static {
 		grammars.add(Arrays.asList(Keyword.DELAY.getWord(), Keyword.VAR.getWord()));
+		grammars.add(Arrays.asList(Keyword.DELAY.getWord(), Keyword.VAR.getWord(), Keyword.THEN.getWord(), Keyword.VAR.getWord()));
 	}
 	
 	@Override
@@ -21,7 +22,7 @@ public class DelayStatement extends Statement{
 		return grammars;
 	}
 	
-	String[] args;
+	
 	public DelayStatement(String[] args) {
 		super(args);
 		this.args = args;

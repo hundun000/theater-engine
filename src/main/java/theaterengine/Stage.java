@@ -66,7 +66,7 @@ public class Stage extends JFrame{
 	
 	JPanel panelEdit;
 	JTextArea textAreaCode;
-	Scence scence;
+	Scene scene;
 	StagePanel stagePanel;
 	Parser parser;
 	
@@ -173,16 +173,16 @@ public class Stage extends JFrame{
 	
 	
 	public void restart(List<String> docs) {
-		if (scence != null) {
-			scence.cancel();
+		if (scene != null) {
+			scene.cancel();
 		}
 		
 		
         
         stagePanel.clearStage();
         
-        scence = new Scence(stagePanel, docs, parser);
-        scence.start();
+        scene = new Scene(stagePanel, docs, parser);
+        scene.start();
         
 	}
 	

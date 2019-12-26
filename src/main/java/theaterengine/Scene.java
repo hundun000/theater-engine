@@ -25,48 +25,48 @@ import theaterengine.script.statement.ScreenPairMoveStatement;
  * @author hundun
  * Created on 2019/04/01
  */
-public class Scence extends Timer{
-	private static final Logger logger = LoggerFactory.getLogger(Scence.class);
+public class Scene extends Timer{
+	private static final Logger logger = LoggerFactory.getLogger(Scene.class);
 
 	List<MovementAction> movementActions = new ArrayList<>();
 	
-	public Scence(StagePanel stagePanel, List<String> docs, Parser parser) {
+	public Scene(StagePanel stagePanel, List<String> docs, Parser parser) {
 		
 		int delay = 0;
         for (int i = 0; i < docs.size(); i++) {
         	String line = docs.get(i);
-        	String[] items = getItemsByScript(line);
-        	if (items == null || items.length == 0) {
+        	String[] args = getArgsItemsByScript(line);
+        	if (args == null || args.length == 0) {
         		continue;
         	}
-        	StatementType type = parser.parse(items);
+        	StatementType type = parser.parse(args);
         	if (type == null) {
         		logger.warn("第{}行 语法错误：{}", i, line);
         		continue;
         	}
         	switch (type) {
         	case ROLE_ONE_DIRECTION_MOVE:
-				RoleOneDirectionMoveStatement roleMoveStatement = new RoleOneDirectionMoveStatement(items);
+				RoleOneDirectionMoveStatement roleMoveStatement = new RoleOneDirectionMoveStatement(args);
 				addMovementActions(roleMoveStatement.toMoveActions(delay + roleMoveStatement.getDelay(), stagePanel));
 				break;
         	case ROLE_TWO_DIRECTION_MOVE:
-				RoleTwoDirectionMoveStatement roleTwoDirectionMoveStatement = new RoleTwoDirectionMoveStatement(items);
+				RoleTwoDirectionMoveStatement roleTwoDirectionMoveStatement = new RoleTwoDirectionMoveStatement(args);
 				addMovementActions(roleTwoDirectionMoveStatement.toMoveActions(delay + roleTwoDirectionMoveStatement.getDelay(), stagePanel));
 				break;
 			case SCREEN_PAIR_MOVE:
-				ScreenPairMoveStatement screenPairStatement = new ScreenPairMoveStatement(items);
+				ScreenPairMoveStatement screenPairStatement = new ScreenPairMoveStatement(args);
 		        addMovementActions(screenPairStatement.toMoveActions(delay, stagePanel));
 				break;
 			case DELAY:
-				DelayStatement delayStatement = new DelayStatement(items);
+				DelayStatement delayStatement = new DelayStatement(args);
 				delay += delayStatement.getDelay();
 				break;
 			case SCREEN_CTEATE:
-				ScreenCreateStatement screenCreateStatement = new ScreenCreateStatement(items);
+				ScreenCreateStatement screenCreateStatement = new ScreenCreateStatement(args);
 				screenCreateStatement.work(stagePanel);
 				break;
 			case ROLE_CTEATE:
-				RoleCreateStatement roleCreateStatement = new RoleCreateStatement(items);
+				RoleCreateStatement roleCreateStatement = new RoleCreateStatement(args);
 				roleCreateStatement.work(stagePanel);
 				break;
 			default:
@@ -76,14 +76,14 @@ public class Scence extends Timer{
         }
 	}
 	
-	private String[] getItemsByScript(String line) {
+	private String[] getArgsItemsByScript(String line) {
 		line.trim();
 		if(line.startsWith(Keyword.COMMENT.getWord())) {
 			return null;
 		}
-		String[] items = line.split(" ");
+		String[] args= line.split(" ");
 		List<String> list = new ArrayList<>();
-		for (String item : items) {
+		for (String item : args) {
 			if (item.length() > 0) {
 				list.add(item);
 			}
