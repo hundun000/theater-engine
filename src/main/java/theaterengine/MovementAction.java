@@ -28,7 +28,7 @@ public class MovementAction extends TimerTask{
 	private StagePanel stagePanel;
 	private boolean work = true;
 	int delay;
-	Timer timer;
+	Timer secondClock;
 	
 	public MovementAction(StagePanel stagePanel, MoveableItem mover, double speedX, double speedY, int times, int delay) {
 		this.stagePanel = stagePanel;
@@ -56,8 +56,8 @@ public class MovementAction extends TimerTask{
 			times --;
 			work = times > 0;
 		} else {
-			if (timer != null) {
-				timer.cancel();
+			if (secondClock != null) {
+				secondClock.cancel();
 				System.out.println("最后一个action执行完毕");
 			}
 		}

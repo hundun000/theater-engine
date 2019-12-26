@@ -25,10 +25,7 @@ public class ScreenCreateStatement extends Statement {
 		grammars.add(Keyword.getWords(Keyword.CREATE_SCREEN, Keyword.VAR, Keyword.WIDTH, Keyword.VAR, Keyword.BACKWARD, Keyword.VAR, Keyword.RIGHT, Keyword.VAR));
 	}
 	
-	@Override
-	List<List<String>> getGrammers() {
-		return grammars;
-	}
+
 	
 	String[] args;
 	public ScreenCreateStatement(String[] args) {

@@ -2,6 +2,7 @@ package theaterengine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,21 +20,24 @@ import theaterengine.script.statement.RoleOneDirectionMoveStatement;
 import theaterengine.script.statement.RoleTwoDirectionMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.statement.ScreenPairMoveStatement;
+import theaterengine.script.task.ConditionTask;
+import theaterengine.script.task.DelayTask;
+
 
 /**
  *
  * @author hundun
  * Created on 2019/04/01
  */
-public class Scene extends Timer{
+public class Scene extends TimerTask {
 	private static final Logger logger = LoggerFactory.getLogger(Scene.class);
 
 	List<MovementAction> movementActions = new ArrayList<>();
+	public List<ConditionTask> conditionTasks = new LinkedList<>();
 	
 	public Scene(StagePanel stagePanel, List<String> docs, Parser parser) {
 		
-		int delay = 0;
-        for (int i = 0; i < docs.size(); i++) {
+		for (int i = 0; i < docs.size(); i++) {
         	String line = docs.get(i);
         	String[] args = getArgsItemsByScript(line);
         	if (args == null || args.length == 0) {
@@ -47,19 +51,20 @@ public class Scene extends Timer{
         	switch (type) {
         	case ROLE_ONE_DIRECTION_MOVE:
 				RoleOneDirectionMoveStatement roleMoveStatement = new RoleOneDirectionMoveStatement(args);
-				addMovementActions(roleMoveStatement.toMoveActions(delay + roleMoveStatement.getDelay(), stagePanel));
+				
 				break;
         	case ROLE_TWO_DIRECTION_MOVE:
 				RoleTwoDirectionMoveStatement roleTwoDirectionMoveStatement = new RoleTwoDirectionMoveStatement(args);
-				addMovementActions(roleTwoDirectionMoveStatement.toMoveActions(delay + roleTwoDirectionMoveStatement.getDelay(), stagePanel));
+				
 				break;
 			case SCREEN_PAIR_MOVE:
 				ScreenPairMoveStatement screenPairStatement = new ScreenPairMoveStatement(args);
-		        addMovementActions(screenPairStatement.toMoveActions(delay, stagePanel));
+		        
 				break;
 			case DELAY:
 				DelayStatement delayStatement = new DelayStatement(args);
-				delay += delayStatement.getDelay();
+				DelayTask delayTask = new DelayTask(delayStatement, this);
+				conditionTasks.add(delayTask);
 				break;
 			case SCREEN_CTEATE:
 				ScreenCreateStatement screenCreateStatement = new ScreenCreateStatement(args);
@@ -90,27 +95,15 @@ public class Scene extends Timer{
 		}
 		return list.toArray(new String[list.size()]);
 	}
+	
 
-	public void addMovementActions(List<MovementAction> movementActions) {
-		for (MovementAction movementAction : movementActions) {
-			addMovementAction(movementAction);
-		}
-	}
-	
-	public void addMovementAction(MovementAction movementAction) {
-		movementActions.add(movementAction);
-		movementAction.timer = this;
-		if (movementActions.size() >= 2) {
-			movementActions.get(movementActions.size() - 2).timer = null;
-		}
-	}
-	
-	
-	public void start() {
-		for (MovementAction action : movementActions) {
-			scheduleAtFixedRate(action, action.delay, MovementAction.period);
-		}
-	}
+
+    @Override
+    public void run() {
+        for (ConditionTask conditionTask : conditionTasks) {
+            conditionTask.clockArrive();
+        }
+    }
 
 }
 

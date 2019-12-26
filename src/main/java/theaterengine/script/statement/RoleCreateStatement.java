@@ -30,10 +30,6 @@ public class RoleCreateStatement extends Statement {
 		}
 	}
 	
-	@Override
-	List<List<String>> getGrammers() {
-		return grammars;
-	}
 	
 	
 	

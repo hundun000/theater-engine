@@ -10,7 +10,6 @@ import java.util.List;
  * Created on 2019/04/01
  */
 public abstract class Statement {
-	abstract List<List<String>> getGrammers();
 	
 	protected String[] args;
 	private String string;
@@ -23,4 +22,8 @@ public abstract class Statement {
 	public String toString() {
 		return string;
 	}
+	
+	public String[] getArgs() {
+        return args;
+    }
 }

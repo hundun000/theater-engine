@@ -9,26 +9,17 @@ import java.util.List;
  * @author hundun
  * Created on 2019/04/01
  */
-public class DelayStatement extends Statement{
-	
-	public static List<List<String>> grammars = new ArrayList<>();
-	static {
-		grammars.add(Arrays.asList(Keyword.DELAY.getWord(), Keyword.VAR.getWord()));
-		grammars.add(Arrays.asList(Keyword.DELAY.getWord(), Keyword.VAR.getWord(), Keyword.THEN.getWord(), Keyword.VAR.getWord()));
-	}
-	
-	@Override
-	List<List<String>> getGrammers() {
-		return grammars;
-	}
-	
+public class DelayStatement extends Statement {
 	
 	public DelayStatement(String[] args) {
-		super(args);
-		this.args = args;
+        super(args);
+    }
+    public static List<List<String>> grammars = new ArrayList<>();
+	static {
+		grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.DELAY, Keyword.VAR));
+		grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.DELAY, Keyword.VAR, Keyword.THEN, Keyword.VAR));
 	}
+
 	
-	public int getDelay() {
-		return (int) (Double.parseDouble(args[1]) * 1000);
-	}
+	
 }

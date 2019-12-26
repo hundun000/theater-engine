@@ -34,10 +34,6 @@ public class ScreenPairMoveStatement extends Statement{
 		}
 	}
 	
-	@Override
-	List<List<String>> getGrammers() {
-		return grammars;
-	}
 	
 	String[] args;
 	public ScreenPairMoveStatement(String[] args) {

@@ -44,10 +44,7 @@ public class RoleTwoDirectionMoveStatement extends Statement{
 		}
 	}
 	
-	@Override
-	List<List<String>> getGrammers() {
-		return grammars;
-	}
+
 	
 	
 	String argName;

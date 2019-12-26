@@ -34,17 +34,14 @@ public class RoleOneDirectionMoveStatement extends Statement{
 		Keyword[] directions = new Keyword[] {Keyword.FORWARD, Keyword.BACKWARD, Keyword.LEFT, Keyword.RIGHT};
 		for (Keyword speed : speeds) {
 			for (Keyword direction : directions) {
-				// 哈姆雷特 中速 向前 2
-				grammars.add(Keyword.getWords(Keyword.VAR, speed, direction, Keyword.VAR));
-				grammars.add(Keyword.getWords(Keyword.ROLE_DELAY, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR));
+				// 等待 开幕 哈姆雷特 中速 向前 2
+				grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR));
+				//grammars.add(Keyword.getWords(Keyword.ROLE_DELAY, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR));
 			}
 		}
 	}
 	
-	@Override
-	List<List<String>> getGrammers() {
-		return grammars;
-	}
+
 	
 	
 	String argName;

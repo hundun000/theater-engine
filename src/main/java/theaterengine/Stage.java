@@ -70,7 +70,7 @@ public class Stage extends JFrame{
 	StagePanel stagePanel;
 	Parser parser;
 	
-	final String filename = "play.txt";
+	final String filename = "play/test.txt";
 	
 	public Stage(int width, Integer height, int positionZeroX, int positionZeroY) {
 		Stage.positionZeroX = positionZeroX;
@@ -182,7 +182,8 @@ public class Stage extends JFrame{
         stagePanel.clearStage();
         
         scene = new Scene(stagePanel, docs, parser);
-        scene.start();
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(scene, 0, 100);
         
 	}
 	
