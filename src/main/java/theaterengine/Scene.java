@@ -17,11 +17,14 @@ import theaterengine.script.statement.DelayStatement;
 import theaterengine.script.statement.Keyword;
 import theaterengine.script.statement.RoleCreateStatement;
 import theaterengine.script.statement.RoleOneDirectionMoveStatement;
+import theaterengine.script.statement.RoleSpeakStatement;
 import theaterengine.script.statement.RoleTwoDirectionMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.statement.ScreenPairMoveStatement;
 import theaterengine.script.task.ConditionTask;
 import theaterengine.script.task.DelayTask;
+import theaterengine.script.task.RoleOneDirectionMoveTask;
+import theaterengine.script.task.RoleSpeakTask;
 
 
 /**
@@ -35,8 +38,11 @@ public class Scene extends TimerTask {
 	List<MovementAction> movementActions = new ArrayList<>();
 	public List<ConditionTask> conditionTasks = new LinkedList<>();
 	
+	private StagePanel stagePanel;
+	
 	public Scene(StagePanel stagePanel, List<String> docs, Parser parser) {
-		
+		this.stagePanel = stagePanel;
+	    
 		for (int i = 0; i < docs.size(); i++) {
         	String line = docs.get(i);
         	String[] args = getArgsItemsByScript(line);
@@ -51,7 +57,8 @@ public class Scene extends TimerTask {
         	switch (type) {
         	case ROLE_ONE_DIRECTION_MOVE:
 				RoleOneDirectionMoveStatement roleMoveStatement = new RoleOneDirectionMoveStatement(args);
-				
+				RoleOneDirectionMoveTask roleOneDirectionMoveTask = new RoleOneDirectionMoveTask(roleMoveStatement, this);
+                conditionTasks.add(roleOneDirectionMoveTask);
 				break;
         	case ROLE_TWO_DIRECTION_MOVE:
 				RoleTwoDirectionMoveStatement roleTwoDirectionMoveStatement = new RoleTwoDirectionMoveStatement(args);
@@ -66,6 +73,11 @@ public class Scene extends TimerTask {
 				DelayTask delayTask = new DelayTask(delayStatement, this);
 				conditionTasks.add(delayTask);
 				break;
+			case ROLE_SPEAK:
+			    RoleSpeakStatement roleSpeakStatement = new RoleSpeakStatement(args);
+			    RoleSpeakTask roleSpeakTask = new RoleSpeakTask(roleSpeakStatement, this);
+			    conditionTasks.add(roleSpeakTask);
+			    break;
 			case SCREEN_CTEATE:
 				ScreenCreateStatement screenCreateStatement = new ScreenCreateStatement(args);
 				screenCreateStatement.work(stagePanel);
@@ -103,6 +115,7 @@ public class Scene extends TimerTask {
         for (ConditionTask conditionTask : conditionTasks) {
             conditionTask.clockArrive();
         }
+        stagePanel.repaint();
     }
 
 }

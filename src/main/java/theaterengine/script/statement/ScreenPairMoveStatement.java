@@ -24,7 +24,7 @@ public class ScreenPairMoveStatement extends Statement{
 	
 	public static List<List<String>> grammars = new ArrayList<>();
 	static {
-		Keyword[] speeds = new Keyword[] {Keyword.FAST_SPEED, Keyword.MID_SPEED, Keyword.SLOW_SPEED};
+		Keyword[] speeds = new Keyword[] {Keyword.ROLE_FAST_SPEED, Keyword.ROLE_MID_SPEED, Keyword.ROLE_SLOW_SPEED};
 		Keyword[] operations = new Keyword[] {Keyword.BIG_OPEN, Keyword.MID_OPEN, Keyword.SMALL_OPEN, Keyword.BIG_CLOSE, Keyword.MID_CLOSE, Keyword.SMALL_CLOSE};
 		for (Keyword speed : speeds) {
 			for (Keyword operation : operations) {

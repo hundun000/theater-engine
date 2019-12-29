@@ -17,7 +17,7 @@ public class DelayStatement extends Statement {
     public static List<List<String>> grammars = new ArrayList<>();
 	static {
 		grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.DELAY, Keyword.VAR));
-		grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.DELAY, Keyword.VAR, Keyword.THEN, Keyword.VAR));
+		grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.DELAY, Keyword.VAR, Keyword.THEN_SET, Keyword.VAR));
 	}
 
 	

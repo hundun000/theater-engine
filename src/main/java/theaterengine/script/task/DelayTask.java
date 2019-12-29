@@ -16,14 +16,11 @@ public class DelayTask extends ConditionTask{
     int delay;
     int counter = 0;
     String doneFlag;
-    Timer timer;
-    Scene parent;
+    
     
     public DelayTask(DelayStatement delayStatement, Scene parent) {
-        this.timer = new Timer();
-        this.parent = parent;
-        
-        super.condition = delayStatement.getArgs()[1];
+        super(parent, delayStatement.getArgs()[1]);
+
         this.delay = (int) (Integer.parseInt(delayStatement.getArgs()[3]));
         this.doneFlag = delayStatement.getArgs().length > 5 ? delayStatement.getArgs()[5] : null;
         
@@ -35,7 +32,9 @@ public class DelayTask extends ConditionTask{
         counter++;
         System.out.println("DelayTask run counter = " + counter);
         if (counter == delay) {
-            MessageBus.addFlag(doneFlag);
+            if (doneFlag != null) {
+                MessageBus.addFlag(doneFlag);
+            }
             System.out.println("done, add flag : " + doneFlag);
             timer.cancel();
             parent.conditionTasks.remove(this);

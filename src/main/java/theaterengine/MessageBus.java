@@ -11,7 +11,7 @@ public class MessageBus {
     
     private static Set<String> flags = ConcurrentHashMap.<String> newKeySet();
     static {
-        flags.add("第一幕开幕");
+        reset();
     }
     
     
@@ -21,6 +21,11 @@ public class MessageBus {
     
     public static boolean hasFlag(String flag) {
         return flags.contains(flag);
+    }
+
+    public static void reset() {
+        flags.clear();
+        flags.add("第一幕开幕");
     }
 
 }

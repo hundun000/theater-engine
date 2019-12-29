@@ -1,8 +1,10 @@
 package theaterengine.script.task;
 
+import java.util.Timer;
 import java.util.TimerTask;
 
 import theaterengine.MessageBus;
+import theaterengine.Scene;
 
 /**
  * @author hundun
@@ -12,7 +14,15 @@ public abstract class ConditionTask extends TimerTask {
     
     protected boolean waiting = true;
     
-    protected String condition;
+    private String condition;
+    protected Scene parent;
+    protected Timer timer;
+    
+    public ConditionTask(Scene parent, String condition) {
+        this.parent = parent;
+        this.timer = new Timer();
+        this.condition = condition;
+    }
     
     public boolean isReady() {
         if (condition == null) {

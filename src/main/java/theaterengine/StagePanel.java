@@ -41,7 +41,7 @@ public class StagePanel extends JPanel{
     public void addScreen(Screen stageScreen) {
     	stageScreens.add(stageScreen);
 	}
-    
+    Font speakFont = new Font(null, Font.PLAIN, (int) ScalaTool.meterToPixel(0.5));
     Font fontItemName = new Font(null, Font.PLAIN, (int) ScalaTool.meterToPixel(0.3));
     private void drawScreen(Graphics2D g2d, Screen stageScreen) {
     	g2d.setColor(Color.GRAY);
@@ -66,9 +66,24 @@ public class StagePanel extends JPanel{
         g2d.setColor(Color.GRAY);
         g2d.fillOval((int)role.x - Role.radius, (int)role.y - Role.radius, 2 * Role.radius, 2 * Role.radius);
 
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(Color.BLACK);
         g2d.setFont(fontItemName);
-        g2d.drawString(role.name, (int) (role.x - Role.radius + 0.2 * fontItemName.getSize()), (int) (role.y + 0.5 * fontItemName.getSize()));
+        
+        int roleX = (int) (role.x - Role.radius + 0.2 * fontItemName.getSize());
+        int roleY = (int) (role.y + 0.5 * fontItemName.getSize());
+        
+        
+        g2d.drawString(role.name, roleX, roleY);
+        
+        if (role.getSpeaking().length() != 0) {
+            String text = role.name + " : " + role.getSpeaking();
+            g2d.setColor(Color.BLACK);
+            g2d.setFont(speakFont);
+            int speakX = Stage.stagePanelWidth / 2 - text.length() * speakFont.getSize() / 2;
+            int speakY = Stage.stagePanelHeight - speakFont.getSize();
+            g2d.drawString(text, speakX, speakY);
+        }
+        
         
     }
 	
@@ -79,6 +94,8 @@ public class StagePanel extends JPanel{
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
+        drawGrids(g2d, (int) ScalaTool.meterToPixel(1));
+        
         for (Role role : roles) {
         	drawRole(g2d, role);
         }
@@ -87,7 +104,6 @@ public class StagePanel extends JPanel{
         	drawScreen(g2d, stageScreen);
         }
         
-        drawGrids(g2d, (int) ScalaTool.meterToPixel(1));
         
         
         g2d.dispose();
@@ -98,12 +114,14 @@ public class StagePanel extends JPanel{
 		g2d.setColor(Color.RED);
         g2d.setFont(gridFont);
         
+        int gridAreaHeight = (int) (this.getHeight() - 1.5 * speakFont.getSize());
+        
 		for (int x = space ; x < this.getWidth(); x += space) {
 			int xx =  x - Stage.positionZeroX;
-			g2d.drawLine(x, 0, x, this.getHeight());
+			g2d.drawLine(x, 0, x, gridAreaHeight);
 			g2d.drawString(String.valueOf(ScalaTool.pixelToMeter(xx)), x + 5, gridFont.getSize());
 		}
-		for (int y = space ; y < this.getHeight(); y += space) {
+		for (int y = space ; y < gridAreaHeight; y += space) {
 			int yy = y - Stage.positionZeroY;
 			g2d.drawLine(0, y, this.getWidth(), y);
 			g2d.drawString(String.valueOf(ScalaTool.pixelToMeter(yy)), 0, y);

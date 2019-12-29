@@ -29,10 +29,7 @@ public enum Keyword {
 	ROLE_MID_SPEED("中速", new Double(2)),
 	ROLE_SLOW_SPEED("慢速", new Double(1)),
 	
-	// m/s
-	FAST_SPEED("快速", new Double(1.5)),
-	MID_SPEED("中速", new Double(1)),
-	SLOW_SPEED("慢速", new Double(0.5)),
+
 	
 	BIG_OPEN("大开", new Double(-1.5)),
 	MID_OPEN("中开", new Double(-1)),
@@ -46,7 +43,9 @@ public enum Keyword {
 	DELAY("延时", null),
 	VAR("", null),
 	
-	THEN("然后宣布", null),
+	SPEAK("说", null),
+	
+	THEN_SET("然后宣布", null),
 	WHEN("等到", null),
 	;
 	

@@ -35,8 +35,9 @@ public class RoleOneDirectionMoveStatement extends Statement{
 		for (Keyword speed : speeds) {
 			for (Keyword direction : directions) {
 				// 等待 开幕 哈姆雷特 中速 向前 2
-				grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR));
-				//grammars.add(Keyword.getWords(Keyword.ROLE_DELAY, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR));
+			    grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR));
+				grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR, Keyword.THEN_SET, Keyword.VAR));
+				//grammars.add(Keyword.getWords(Keyword.ROLE_DELAY, Keyword.VAR, Keyword.VAR, speedPerClock, direction, Keyword.VAR));
 			}
 		}
 	}

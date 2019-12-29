@@ -44,6 +44,7 @@ import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;
 import theaterengine.script.statement.RoleCreateStatement;
 import theaterengine.script.statement.RoleOneDirectionMoveStatement;
+import theaterengine.script.statement.RoleSpeakStatement;
 import theaterengine.script.statement.RoleTwoDirectionMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.statement.ScreenPairMoveStatement;
@@ -60,9 +61,11 @@ public class Stage extends JFrame{
 	private static final Logger logger = LoggerFactory.getLogger(Stage.class);
 
 	
-	public static int positionZeroX;
-	public static int positionZeroY;
+	public static int positionZeroX = (int)ScalaTool.meterToPixel(9);
+	public static int positionZeroY = (int)ScalaTool.meterToPixel(4);
 	
+	public static int stagePanelWidth = (int)ScalaTool.meterToPixel(18);
+    public static int stagePanelHeight = (int)ScalaTool.meterToPixel(8);
 	
 	JPanel panelEdit;
 	JTextArea textAreaCode;
@@ -72,7 +75,7 @@ public class Stage extends JFrame{
 	
 	final String filename = "play/test.txt";
 	
-	public Stage(int width, Integer height, int positionZeroX, int positionZeroY) {
+	public Stage(int width, int height, int positionZeroX, int positionZeroY) {
 		Stage.positionZeroX = positionZeroX;
 		Stage.positionZeroY = positionZeroY;
 		
@@ -128,7 +131,7 @@ public class Stage extends JFrame{
 		getContentPane().add(stagePanel);
 		getContentPane().add(panelEdit);
         
-        setSize(width + panelEditWidth + 30, height + 50);    //设置窗口显示尺寸
+        setSize(width + panelEditWidth + 30, height + 100);    //设置窗口显示尺寸
         setLocationRelativeTo(null);
         
         setVisible(true);    //设置窗口是否可见
@@ -149,7 +152,8 @@ public class Stage extends JFrame{
 		parser.registerGrammars(RoleCreateStatement.grammars, StatementType.ROLE_CTEATE);
 		parser.registerGrammars(RoleOneDirectionMoveStatement.grammars, StatementType.ROLE_ONE_DIRECTION_MOVE);
 		parser.registerGrammars(RoleTwoDirectionMoveStatement.grammars, StatementType.ROLE_TWO_DIRECTION_MOVE);
-		
+		parser.registerGrammars(RoleSpeakStatement.grammars, StatementType.ROLE_SPEAK);
+        
 		
 		
 		InputStreamReader reader;
@@ -185,12 +189,13 @@ public class Stage extends JFrame{
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(scene, 0, 100);
         
+        MessageBus.reset();
 	}
 	
 	
 	
 	public static void main(String[] args) {
-		new Stage((int)ScalaTool.meterToPixel(18), (int)ScalaTool.meterToPixel(8), (int)ScalaTool.meterToPixel(9), (int)ScalaTool.meterToPixel(4));
+		new Stage(stagePanelWidth, stagePanelHeight, positionZeroX, positionZeroY);
 	}
 
 }
