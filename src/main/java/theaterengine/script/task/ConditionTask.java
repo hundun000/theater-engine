@@ -15,13 +15,15 @@ public abstract class ConditionTask extends TimerTask {
     protected boolean waiting = true;
     
     private String condition;
+    protected String doneFlag;
     protected Scene parent;
     protected Timer timer;
     
-    public ConditionTask(Scene parent, String condition) {
+    public ConditionTask(Scene parent, String condition, String doneFlag) {
         this.parent = parent;
         this.timer = new Timer();
         this.condition = condition;
+        this.doneFlag = doneFlag;
     }
     
     public boolean isReady() {

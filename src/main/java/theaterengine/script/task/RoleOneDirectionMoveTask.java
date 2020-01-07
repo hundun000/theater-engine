@@ -26,15 +26,13 @@ public class RoleOneDirectionMoveTask extends ConditionTask {
     private Double targetX;
     private Double targetY;
     private double speed;
-    String doneFlag;
     
-    public RoleOneDirectionMoveTask(RoleOneDirectionMoveStatement statement, Scene parent) {
-        super(parent, statement.getArgs()[1]);
-        this.role = RoleFactory.get(statement.getArgs()[2]);
-        this.speed = Keyword.get(statement.getArgs()[3]).getDoubleValue();
-        String argDirection = statement.getArgs()[4];
-        String argDistance = statement.getArgs()[5];
-        this.doneFlag = statement.getArgs().length > 7 ? statement.getArgs()[7] : null;
+    public RoleOneDirectionMoveTask(RoleOneDirectionMoveStatement statement, Scene parent, String condition, String doneFlag) {
+        super(parent, condition, doneFlag);
+        this.role = RoleFactory.get(statement.argName);
+        this.speed = Keyword.get(statement.argSpeed).getDoubleValue();
+        String argDirection = statement.argDirection1;
+        String argDistance = statement.argDistance1;
         
         
         switch (Keyword.get(argDirection)) {

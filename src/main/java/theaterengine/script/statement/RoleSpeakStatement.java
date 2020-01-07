@@ -10,15 +10,20 @@ import java.util.List;
  * Created on 2019/04/01
  */
 public class RoleSpeakStatement extends Statement {
-	
-	public RoleSpeakStatement(String[] args) {
-        super(args);
-    }
     public static List<List<String>> grammars = new ArrayList<>();
-	static {
-		grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR,  Keyword.VAR, Keyword.SPEAK, Keyword.VAR));
-		grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR,  Keyword.VAR, Keyword.SPEAK, Keyword.VAR, Keyword.THEN_SET, Keyword.VAR));
-	}
+    static {
+        grammars.add(Keyword.getWords(Keyword.VAR, Keyword.SPEAK, Keyword.VAR));
+    }
+    
+    public String fullWord;
+    public String roleName;
+    
+	public RoleSpeakStatement(List<String> args) {
+        super(args);
+        this.roleName = args.get(0);
+        this.fullWord = args.get(2);
+    }
+    
 
 	
 	

@@ -18,9 +18,7 @@ import theaterengine.script.statement.Keyword;
 import theaterengine.script.statement.RoleCreateStatement;
 import theaterengine.script.statement.RoleOneDirectionMoveStatement;
 import theaterengine.script.statement.RoleSpeakStatement;
-import theaterengine.script.statement.RoleTwoDirectionMoveStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
-import theaterengine.script.statement.ScreenPairMoveStatement;
 import theaterengine.script.task.ConditionTask;
 import theaterengine.script.task.DelayTask;
 import theaterengine.script.task.RoleOneDirectionMoveTask;
@@ -40,16 +38,56 @@ public class Scene extends TimerTask {
 	
 	private StagePanel stagePanel;
 	
+	private String removeCondition(List<String> args) {
+	    if (args.size() > 2 && Keyword.isMatch(args.get(0), Keyword.WHEN) &&  Keyword.isMatch(args.get(1), Keyword.VAR)) {
+	        args.remove(0);
+	        return args.remove(0);
+	    } else {
+	        return null;
+	    }
+	}
+	
+	private String removeFlag(List<String> args) {
+	    int size = args.size();
+        if (size > 2 && Keyword.isMatch(args.get(size - 2), Keyword.THEN_SET) &&  Keyword.isMatch(args.get(size - 1), Keyword.VAR)) {
+            args.remove(size - 2);
+            size--;
+            return args.remove(size - 1);
+        } else {
+            return null;
+        }
+    }
+	
 	public Scene(StagePanel stagePanel, List<String> docs, Parser parser) {
 		this.stagePanel = stagePanel;
 	    
+		int autoFlagIndex = 0;
 		for (int i = 0; i < docs.size(); i++) {
         	String line = docs.get(i);
-        	String[] args = getArgsItemsByScript(line);
-        	if (args == null || args.length == 0) {
+        	List<String> args = getArgsItemsByScript(line);
+        	if (args == null || args.size() == 0) {
         		continue;
         	}
-        	StatementType type = parser.parse(args);
+        	
+        	String condition = removeCondition(args);
+        	String doneFlag = removeFlag(args);
+        	
+        	if (condition == null) {
+        	    condition = "Auto" + autoFlagIndex;
+        	}
+        	autoFlagIndex ++;
+        	if (doneFlag == null) {
+        	    doneFlag = "Auto" + autoFlagIndex;
+        	} else {
+        	    doneFlag += ",Auto" + autoFlagIndex;
+        	}
+        	logger.info("line {}: condition={}, doneFlag={}, remain={}", i, condition, doneFlag, args);
+        	
+        	
+        	StatementType type = parser.parse(args.toArray(new String[args.size()]));
+        	
+        	
+        	
         	if (type == null) {
         		logger.warn("第{}行 语法错误：{}", i, line);
         		continue;
@@ -57,25 +95,23 @@ public class Scene extends TimerTask {
         	switch (type) {
         	case ROLE_ONE_DIRECTION_MOVE:
 				RoleOneDirectionMoveStatement roleMoveStatement = new RoleOneDirectionMoveStatement(args);
-				RoleOneDirectionMoveTask roleOneDirectionMoveTask = new RoleOneDirectionMoveTask(roleMoveStatement, this);
+				RoleOneDirectionMoveTask roleOneDirectionMoveTask = new RoleOneDirectionMoveTask(roleMoveStatement, this, condition, doneFlag);
                 conditionTasks.add(roleOneDirectionMoveTask);
 				break;
         	case ROLE_TWO_DIRECTION_MOVE:
-				RoleTwoDirectionMoveStatement roleTwoDirectionMoveStatement = new RoleTwoDirectionMoveStatement(args);
 				
 				break;
 			case SCREEN_PAIR_MOVE:
-				ScreenPairMoveStatement screenPairStatement = new ScreenPairMoveStatement(args);
-		        
+				
 				break;
 			case DELAY:
 				DelayStatement delayStatement = new DelayStatement(args);
-				DelayTask delayTask = new DelayTask(delayStatement, this);
+				DelayTask delayTask = new DelayTask(delayStatement, this, condition, doneFlag);
 				conditionTasks.add(delayTask);
 				break;
 			case ROLE_SPEAK:
 			    RoleSpeakStatement roleSpeakStatement = new RoleSpeakStatement(args);
-			    RoleSpeakTask roleSpeakTask = new RoleSpeakTask(roleSpeakStatement, this);
+			    RoleSpeakTask roleSpeakTask = new RoleSpeakTask(roleSpeakStatement, this, condition, doneFlag);
 			    conditionTasks.add(roleSpeakTask);
 			    break;
 			case SCREEN_CTEATE:
@@ -93,19 +129,19 @@ public class Scene extends TimerTask {
         }
 	}
 	
-	private String[] getArgsItemsByScript(String line) {
+	private List<String> getArgsItemsByScript(String line) {
 		line.trim();
 		if(line.startsWith(Keyword.COMMENT.getWord())) {
 			return null;
 		}
 		String[] args= line.split(" ");
-		List<String> list = new ArrayList<>();
+		List<String> list = new LinkedList<>();
 		for (String item : args) {
 			if (item.length() > 0) {
 				list.add(item);
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		return list;
 	}
 	
 

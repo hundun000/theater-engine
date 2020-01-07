@@ -78,6 +78,15 @@ public enum Keyword {
 		return null;
 	}
 	
+	
+	public static boolean isMatch(String word, Keyword keyword) {
+        if (keyword == VAR) {
+            return get(word) == null;
+        } else {
+            return keyword.getWord().equals(word);
+        }   
+    }
+	
 	public static List<String> getWords(Keyword... keywords) {
 		List<String> words = new ArrayList<>();
 		for (Keyword keyword : keywords) {

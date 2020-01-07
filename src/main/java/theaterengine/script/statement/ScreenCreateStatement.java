@@ -27,17 +27,15 @@ public class ScreenCreateStatement extends Statement {
 	
 
 	
-	String[] args;
-	public ScreenCreateStatement(String[] args) {
-		super(args);
-		this.args = args;
+	public ScreenCreateStatement(List<String> args2) {
+		super(args2);
 	}
 	
 	public void work(StagePanel stagePanel) {
-		String name = args[1];
-		int screenWidth = (int) ScalaTool.meterToPixel(Double.parseDouble(args[3]));
-		double dy = Keyword.get(args[4]).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(args[5]));
-		double dx = Keyword.get(args[6]).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(args[7]));
+		String name = args.get(1);
+		int screenWidth = (int) ScalaTool.meterToPixel(Double.parseDouble(args.get(3)));
+		double dy = Keyword.get(args.get(4)).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(args.get(5)));
+		double dx = Keyword.get(args.get(6)).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(args.get(7)));
 		
 		double x = dx + Stage.positionZeroX;
 		double y = dy + Stage.positionZeroY;

@@ -15,16 +15,13 @@ public class DelayTask extends ConditionTask{
     
     int delay;
     int counter = 0;
-    String doneFlag;
     
     
-    public DelayTask(DelayStatement delayStatement, Scene parent) {
-        super(parent, delayStatement.getArgs()[1]);
+    
+    public DelayTask(DelayStatement delayStatement, Scene parent, String condition, String doneFlag) {
+        super(parent, condition, doneFlag);
 
-        this.delay = (int) (Integer.parseInt(delayStatement.getArgs()[3]));
-        this.doneFlag = delayStatement.getArgs().length > 5 ? delayStatement.getArgs()[5] : null;
-        
-        
+        this.delay = delayStatement.delay;
     }
 
     @Override

@@ -18,18 +18,15 @@ public class RoleSpeakTask extends ConditionTask{
     public static double SPEAK_SPEED = 0.5;
     
     String fullWord;
-    int delay = 0;
-    String doneFlag;
+    int currentLength = 0;
     
     Role role;
     
-    public RoleSpeakTask(RoleSpeakStatement statement, Scene parent) {
-        super(parent, statement.getArgs()[1]);
+    public RoleSpeakTask(RoleSpeakStatement statement, Scene parent, String condition, String doneFlag) {
+        super(parent, condition, doneFlag);
         
-        this.role = RoleFactory.get(statement.getArgs()[2]);
-        this.fullWord = statement.getArgs()[4];
-        this.doneFlag = statement.getArgs().length > 6 ? statement.getArgs()[6] : null;
-        
+        this.role = RoleFactory.get(statement.roleName);
+        this.fullWord = statement.fullWord;
         
     }
     
@@ -45,8 +42,8 @@ public class RoleSpeakTask extends ConditionTask{
 
     @Override
     public void run() {
-        delay++;
-        if (delay >= fullWord.length() * SPEAK_SPEED) {
+        currentLength++;
+        if (currentLength >= fullWord.length() * SPEAK_SPEED) {
             if (doneFlag != null) {
                 MessageBus.addFlag(doneFlag);
             }

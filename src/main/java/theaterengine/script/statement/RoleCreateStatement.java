@@ -41,13 +41,13 @@ public class RoleCreateStatement extends Statement {
 	String argDirectionX;
 	String argDistanceX;
 	
-	public RoleCreateStatement(String[] args) {
+	public RoleCreateStatement(List<String> args) {
 		super(args);
-		argName = args[1];
-		argDirectionY = args[2];
-		argDistanceY = args[3];
-		argDirectionX = args[4];
-		argDistanceX = args[5];
+		argName = args.get(1);
+		argDirectionY = args.get(2);
+		argDistanceY = args.get(3);
+		argDirectionX = args.get(4);
+		argDistanceX = args.get(5);
 	}
 	
 	public void work(StagePanel stagePanel) {

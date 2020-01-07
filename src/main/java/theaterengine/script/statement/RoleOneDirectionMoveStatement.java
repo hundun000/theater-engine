@@ -34,10 +34,8 @@ public class RoleOneDirectionMoveStatement extends Statement{
 		Keyword[] directions = new Keyword[] {Keyword.FORWARD, Keyword.BACKWARD, Keyword.LEFT, Keyword.RIGHT};
 		for (Keyword speed : speeds) {
 			for (Keyword direction : directions) {
-				// 等待 开幕 哈姆雷特 中速 向前 2
-			    grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR));
-				grammars.add(Keyword.getWords(Keyword.WHEN, Keyword.VAR, Keyword.VAR, speed, direction, Keyword.VAR, Keyword.THEN_SET, Keyword.VAR));
-				//grammars.add(Keyword.getWords(Keyword.ROLE_DELAY, Keyword.VAR, Keyword.VAR, speedPerClock, direction, Keyword.VAR));
+				// （等待 开幕） 哈姆雷特 中速 向前 2
+			    grammars.add(Keyword.getWords(Keyword.VAR, speed, direction, Keyword.VAR));
 			}
 		}
 	}
@@ -45,67 +43,21 @@ public class RoleOneDirectionMoveStatement extends Statement{
 
 	
 	
-	String argName;
-	String argSpeed;
-	String argDirection1;
-	String argDistance1;
-	String argDelay;
+	public String argName;
+	public String argSpeed;
+	public String argDirection1;
+	public String argDistance1;
 	
-	public RoleOneDirectionMoveStatement(String[] args) {
+	public RoleOneDirectionMoveStatement(List<String> args) {
 		super(args);
 		
-		if (args.length == 6) {
-			argName = args[2];
-			argSpeed = args[3];
-			argDirection1 = args[4];
-			argDistance1 = args[5];
-			argDelay = args[1];
-		} else {
-			argName = args[0];
-			argSpeed = args[1];
-			argDirection1 = args[2];
-			argDistance1 = args[3];
-			argDelay = "0";
-		}
+		argName = args.get(0);
+		argSpeed = args.get(1);
+		argDirection1 = args.get(2);
+		argDistance1 = args.get(3);
 	}
 	
-	public List<MovementAction> toMoveActions(int delay, StagePanel stagePanel) {
-		List<MovementAction> moveActions = new ArrayList<>();
-				
-		Role role = RoleFactory.get(argName);
-		int times;
-		double speedX;
-		double speedY;
-		double speedResultant = ScalaTool.meterToPixel(Keyword.get(argSpeed).getDoubleValue()) / MovementAction.frequency;
-		
-		
-		double distance = ScalaTool.getSignedDistanceInPixel(argDirection1, argDistance1);
-		times = (int) Math.abs((distance / speedResultant));
-		switch (Keyword.get(argDirection1)) {
-		case FORWARD:
-		case BACKWARD:
-			speedX = 0;
-			speedY = (distance > 0 ? 1 : -1) * speedResultant;
-			break;
-		case LEFT:
-		case RIGHT:
-			speedX = (distance > 0 ? 1 : -1) * speedResultant;
-			speedY = 0;
-			break;	
-		default:
-			speedX = 0;
-			speedY = 0;
-			logger.error("Keyword.get({})未定义行为", argDirection1);
-		}
-
-		
-		moveActions.add(new MovementAction(stagePanel, role, speedX, speedY, times, delay));
-		return moveActions;
-	}
 	
-	public int getDelay() {
-		return (int) (Double.parseDouble(argDelay) * 1000);
-	}
 	
 
 }

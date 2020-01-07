@@ -11,19 +11,23 @@ import java.util.List;
  */
 public abstract class Statement {
 	
-	protected String[] args;
+	protected List<String> args;
 	private String string;
-	public Statement(String[] args) {
-	    this.string = Arrays.toString(args);
+	public Statement(List<String> args) {
+	    this.string = args.toString();
 		this.args = args;
 	}
 	
-	@Override
+	public Statement(String[] args2) {
+        // TODO Auto-generated constructor stub
+    }
+
+    @Override
 	public String toString() {
 		return string;
 	}
 	
-	public String[] getArgs() {
+	public List<String> getArgs() {
         return args;
     }
 }
