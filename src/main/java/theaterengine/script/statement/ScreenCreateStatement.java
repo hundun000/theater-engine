@@ -3,10 +3,11 @@ package theaterengine.script.statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import theaterengine.Screen;
-import theaterengine.ScreenFactory;
-import theaterengine.Stage;
-import theaterengine.StagePanel;
+import theaterengine.Application;
+import theaterengine.entity.Screen;
+import theaterengine.entity.ScreenFactory;
+import theaterengine.gui.MainFrame;
+import theaterengine.gui.StagePanel;
 import theaterengine.script.tool.ScalaTool;
 
 /**
@@ -37,8 +38,8 @@ public class ScreenCreateStatement extends Statement {
 		double dy = Keyword.get(args.get(4)).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(args.get(5)));
 		double dx = Keyword.get(args.get(6)).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(args.get(7)));
 		
-		double x = dx + Stage.positionZeroX;
-		double y = dy + Stage.positionZeroY;
+		double x = dx + Application.positionZeroX;
+		double y = dy + Application.positionZeroY;
 		
 		
 		ScreenFactory.registerAndAddToStage(new Screen(name, x, y, screenWidth), stagePanel);

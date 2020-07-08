@@ -3,8 +3,8 @@ package theaterengine.script.task;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import theaterengine.MessageBus;
-import theaterengine.Scene;
+import theaterengine.core.MessageBus;
+import theaterengine.core.Scene;
 
 /**
  * @author hundun

@@ -1,4 +1,4 @@
-package theaterengine;
+package theaterengine.entity;
 
 import theaterengine.script.tool.ScalaTool;
 
@@ -14,8 +14,16 @@ public class Screen extends MoveableItem{
 		this.width = width;
 	}
 	
-	final int height = (int) ScalaTool.meterToPixel(0.2);
-	final int width; 
+	public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    private final int height = (int) ScalaTool.meterToPixel(0.2);
+	private final int width; 
 	
 
 

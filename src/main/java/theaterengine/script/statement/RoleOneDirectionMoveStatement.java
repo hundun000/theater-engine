@@ -15,13 +15,13 @@ import org.checkerframework.checker.units.qual.s;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import theaterengine.MovementAction;
-import theaterengine.Role;
-import theaterengine.RoleFactory;
-import theaterengine.Screen;
-import theaterengine.ScreenFactory;
-import theaterengine.Stage;
-import theaterengine.StagePanel;
+import theaterengine.core.MovementAction;
+import theaterengine.entity.Role;
+import theaterengine.entity.RoleFactory;
+import theaterengine.entity.Screen;
+import theaterengine.entity.ScreenFactory;
+import theaterengine.gui.MainFrame;
+import theaterengine.gui.StagePanel;
 import theaterengine.script.tool.ScalaTool;
 
 public class RoleOneDirectionMoveStatement extends Statement{

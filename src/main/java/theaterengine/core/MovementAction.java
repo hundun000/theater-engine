@@ -1,4 +1,4 @@
-package theaterengine;
+package theaterengine.core;
 
 import java.util.Date;
 import java.util.Timer;
@@ -7,7 +7,8 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import theaterengine.entity.MoveableItem;
+import theaterengine.gui.StagePanel;
 import theaterengine.script.statement.RoleOneDirectionMoveStatement;
 
 /**
@@ -41,24 +42,24 @@ public class MovementAction extends TimerTask{
 	
 	@Override
 	public String toString() {
-		return "mover=" + mover.name + ",speedX=" + speedX + ",speedY=" + speedY + ",times=" + times;
+		return "mover=" + mover.getName() + ",speedX=" + speedX + ",speedY=" + speedY + ",times=" + times;
 	}
 
 	@Override
 	public void run() {
 		if(work) {
-			double x0 = mover.x;
-			double y0 = mover.y;
+			double x0 = mover.getX();
+			double y0 = mover.getY();
 			mover.move(speedX, speedY);
-			double x1 = mover.x;
-			double y1 = mover.y;
+			double x1 = mover.getX();
+			double y1 = mover.getY();
 			//logger.info("{} {}从({},{})移动到({},{})", new Object[]{System.currentTimeMillis(), mover.name, String.valueOf(x0), String.valueOf(y0), String.valueOf(x1), String.valueOf(y1)});
 			times --;
 			work = times > 0;
 		} else {
 			if (secondClock != null) {
 				secondClock.cancel();
-				System.out.println("最后一个action执行完毕");
+				logger.debug("最后一个action执行完毕");
 			}
 		}
 		stagePanel.updateUI();

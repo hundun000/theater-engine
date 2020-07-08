@@ -2,11 +2,15 @@ package theaterengine.script.task;
 
 import java.util.Timer;
 
-import theaterengine.MessageBus;
-import theaterengine.Role;
-import theaterengine.RoleFactory;
-import theaterengine.Scene;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import theaterengine.core.MessageBus;
+import theaterengine.core.Scene;
+import theaterengine.entity.Role;
+import theaterengine.entity.RoleFactory;
 import theaterengine.script.statement.DelayStatement;
+import theaterengine.script.statement.RoleOneDirectionMoveStatement;
 import theaterengine.script.statement.RoleSpeakStatement;
 
 /**
@@ -15,6 +19,9 @@ import theaterengine.script.statement.RoleSpeakStatement;
  */
 public class RoleSpeakTask extends ConditionTask{
 
+    private static final Logger logger = LoggerFactory.getLogger(RoleSpeakTask.class);
+    
+    
     public static double SPEAK_SPEED = 0.5;
     
     String fullWord;
@@ -47,7 +54,7 @@ public class RoleSpeakTask extends ConditionTask{
             if (doneFlag != null) {
                 MessageBus.addFlag(doneFlag);
             }
-            System.out.println("done, add flag : " + doneFlag);
+            logger.debug("done, add flag : " + doneFlag);
             role.setSpeaking("");
             timer.cancel();
             parent.conditionTasks.remove(this);

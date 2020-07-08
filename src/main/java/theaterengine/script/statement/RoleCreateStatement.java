@@ -3,12 +3,13 @@ package theaterengine.script.statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import theaterengine.Role;
-import theaterengine.RoleFactory;
-import theaterengine.Screen;
-import theaterengine.ScreenFactory;
-import theaterengine.Stage;
-import theaterengine.StagePanel;
+import theaterengine.Application;
+import theaterengine.entity.Role;
+import theaterengine.entity.RoleFactory;
+import theaterengine.entity.Screen;
+import theaterengine.entity.ScreenFactory;
+import theaterengine.gui.MainFrame;
+import theaterengine.gui.StagePanel;
 import theaterengine.script.tool.ScalaTool;
 
 /**
@@ -55,8 +56,8 @@ public class RoleCreateStatement extends Statement {
 		double dy = Keyword.get(argDirectionY).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(argDistanceY));
 		double dx = Keyword.get(argDirectionX).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(argDistanceX));
 		
-		double x = dx + Stage.positionZeroX;
-		double y = dy + Stage.positionZeroY;
+		double x = dx + Application.positionZeroX;
+		double y = dy + Application.positionZeroY;
 		
 		
 		RoleFactory.registerAndAddToStage(new Role(argName, x, y), stagePanel);

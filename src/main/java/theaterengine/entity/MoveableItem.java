@@ -1,4 +1,4 @@
-package theaterengine;
+package theaterengine.entity;
 
 import java.net.Inet4Address;
 
@@ -75,9 +75,21 @@ public class MoveableItem {
 	
 	
 	
-	protected void move(double speedX, double speedY) {
+	public void move(double speedX, double speedY) {
 		x += speedX;
 		y += speedY;
 	}
+	
+	public double getX() {
+        return x;
+    }
+	
+	public double getY() {
+        return y;
+    }
+	
+	public String getName() {
+        return name;
+    }
 	
 }

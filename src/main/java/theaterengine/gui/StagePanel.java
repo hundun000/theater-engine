@@ -1,4 +1,4 @@
-package theaterengine;
+package theaterengine.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,6 +12,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import theaterengine.Application;
+import theaterengine.entity.Role;
+import theaterengine.entity.Screen;
 import theaterengine.script.tool.ScalaTool;
 
 /**
@@ -22,11 +25,13 @@ import theaterengine.script.tool.ScalaTool;
 public class StagePanel extends JPanel{
 	
 	
-	private List<Role> roles = new ArrayList<>();
-	private List<Screen> stageScreens = new ArrayList<>();
+	private final List<Role> roles = new ArrayList<>();
+	private final List<Screen> stageScreens = new ArrayList<>();
+	private final MainFrame mainFrame;
 	
-    public StagePanel() {
+    public StagePanel(MainFrame mainFrame) {
         super();
+        this.mainFrame = mainFrame;
     }
     
     public void clearStage() {
@@ -45,14 +50,14 @@ public class StagePanel extends JPanel{
     Font fontItemName = new Font(null, Font.PLAIN, (int) ScalaTool.meterToPixel(0.3));
     private void drawScreen(Graphics2D g2d, Screen stageScreen) {
     	g2d.setColor(Color.GRAY);
-        g2d.drawRect((int)stageScreen.x - stageScreen.width/2, (int) stageScreen.y, stageScreen.width, stageScreen.height);
+        g2d.drawRect((int)stageScreen.getX() - stageScreen.getWidth()/2, (int)stageScreen.getY(), stageScreen.getWidth(), stageScreen.getHeight());
         
         g2d.setColor(Color.BLACK);
-        g2d.fillRect((int)stageScreen.x - stageScreen.width/2, (int)stageScreen.y, stageScreen.width, stageScreen.height);
+        g2d.fillRect((int)stageScreen.getX() - stageScreen.getWidth()/2, (int)stageScreen.getY(), stageScreen.getWidth(), stageScreen.getHeight());
 
         g2d.setColor(Color.BLACK);
         g2d.setFont(fontItemName);
-        g2d.drawString(stageScreen.name, (int)stageScreen.x - fontItemName.getSize(), (int)stageScreen.y + stageScreen.height + fontItemName.getSize());
+        g2d.drawString(stageScreen.getName(), (int)stageScreen.getX() - fontItemName.getSize(), (int)stageScreen.getY() + stageScreen.getHeight() + fontItemName.getSize());
         
     }
     
@@ -61,26 +66,26 @@ public class StagePanel extends JPanel{
 
         
         g2d.setColor(Color.BLACK);
-        g2d.drawOval((int)role.x - Role.radius, (int)role.y - Role.radius, 2 * Role.radius, 2 * Role.radius);
+        g2d.drawOval((int)role.getX() - Role.radius, (int)role.getY() - Role.radius, 2 * Role.radius, 2 * Role.radius);
 
         g2d.setColor(Color.GRAY);
-        g2d.fillOval((int)role.x - Role.radius, (int)role.y - Role.radius, 2 * Role.radius, 2 * Role.radius);
+        g2d.fillOval((int)role.getX() - Role.radius, (int)role.getY() - Role.radius, 2 * Role.radius, 2 * Role.radius);
 
         g2d.setColor(Color.BLACK);
         g2d.setFont(fontItemName);
         
-        int roleX = (int) (role.x - Role.radius + 0.2 * fontItemName.getSize());
-        int roleY = (int) (role.y + 0.5 * fontItemName.getSize());
+        int roleX = (int) (role.getX() - Role.radius + 0.2 * fontItemName.getSize());
+        int roleY = (int) (role.getY() + 0.5 * fontItemName.getSize());
         
         
-        g2d.drawString(role.name, roleX, roleY);
+        g2d.drawString(role.getName(), roleX, roleY);
         
         if (role.getSpeaking().length() != 0) {
-            String text = role.name + " : " + role.getSpeaking();
+            String text = role.getName() + " : " + role.getSpeaking();
             g2d.setColor(Color.BLACK);
             g2d.setFont(speakFont);
-            int speakX = Stage.stagePanelWidth / 2 - text.length() * speakFont.getSize() / 2;
-            int speakY = Stage.stagePanelHeight - speakFont.getSize();
+            int speakX = Application.stagePanelWidth / 2 - text.length() * speakFont.getSize() / 2;
+            int speakY = Application.stagePanelHeight - speakFont.getSize();
             g2d.drawString(text, speakX, speakY);
         }
         
@@ -117,12 +122,12 @@ public class StagePanel extends JPanel{
         int gridAreaHeight = (int) (this.getHeight() - 1.5 * speakFont.getSize());
         
 		for (int x = space ; x < this.getWidth(); x += space) {
-			int xx =  x - Stage.positionZeroX;
+			int xx =  x - mainFrame.positionZeroX;
 			g2d.drawLine(x, 0, x, gridAreaHeight);
 			g2d.drawString(String.valueOf(ScalaTool.pixelToMeter(xx)), x + 5, gridFont.getSize());
 		}
 		for (int y = space ; y < gridAreaHeight; y += space) {
-			int yy = y - Stage.positionZeroY;
+			int yy = y - mainFrame.positionZeroY;
 			g2d.drawLine(0, y, this.getWidth(), y);
 			g2d.drawString(String.valueOf(ScalaTool.pixelToMeter(yy)), 0, y);
 		}
@@ -168,7 +173,7 @@ public class StagePanel extends JPanel{
      * 2. 矩形 / 多边形
      */
     private void drawRect(Graphics g) {
-        //stage.setTitle("2. 矩形 / 多边形");
+        //mainFrame.setTitle("2. 矩形 / 多边形");
         Graphics2D g2d = (Graphics2D) g.create();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -196,7 +201,7 @@ public class StagePanel extends JPanel{
      * 3. 圆弧 / 扇形
      */
     private void drawArc(Graphics g) {
-        //stage.setTitle("3. 圆弧 / 扇形");
+        //mainFrame.setTitle("3. 圆弧 / 扇形");
         Graphics2D g2d = (Graphics2D) g.create();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -222,7 +227,7 @@ public class StagePanel extends JPanel{
      * 4. 椭圆 (实际上通过绘制360度的圆弧/扇形也能达到绘制圆/椭圆的效果)
      */
     private void drawOval(Graphics g) {
-        //stage.setTitle("4. 椭圆");
+        //mainFrame.setTitle("4. 椭圆");
         Graphics2D g2d = (Graphics2D) g.create();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -243,7 +248,7 @@ public class StagePanel extends JPanel{
      * 5. 图片
      */
     private void drawImage(Graphics g) {
-        //stage.setTitle("5. 图片");
+        //mainFrame.setTitle("5. 图片");
         Graphics2D g2d = (Graphics2D) g.create();
 
         // 从本地读取一张图片
@@ -260,7 +265,7 @@ public class StagePanel extends JPanel{
      * 6. 文本
      */
     private void drawString(Graphics g) {
-        //stage.setTitle("6. 文本");
+        //mainFrame.setTitle("6. 文本");
         Graphics2D g2d = (Graphics2D) g.create();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

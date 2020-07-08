@@ -1,5 +1,9 @@
-package theaterengine;
+package theaterengine.entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import theaterengine.script.task.DelayTask;
 import theaterengine.script.tool.ScalaTool;
 
 /**
@@ -8,7 +12,8 @@ import theaterengine.script.tool.ScalaTool;
  * Created on 2019/04/01
  */
 public class Role extends MoveableItem{
-	
+    private static final Logger logger = LoggerFactory.getLogger(Role.class);
+
     private String speaking = "";
     
     
@@ -18,7 +23,7 @@ public class Role extends MoveableItem{
 	
 	public void setSpeaking(String speaking) {
         this.speaking = speaking;
-        System.out.println(name + ".speaking set to " + speaking);
+        logger.debug(name + ".speaking set to " + speaking);
     }
 	
 	public String getSpeaking() {

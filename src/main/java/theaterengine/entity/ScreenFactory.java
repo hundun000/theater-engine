@@ -1,4 +1,4 @@
-package theaterengine;
+package theaterengine.entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import theaterengine.gui.StagePanel;
 import theaterengine.script.Parser;
 
 /**

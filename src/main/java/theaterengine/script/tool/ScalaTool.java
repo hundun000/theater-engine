@@ -2,7 +2,7 @@ package theaterengine.script.tool;
 
 import com.google.common.util.concurrent.RateLimiter;
 
-import theaterengine.MovementAction;
+import theaterengine.core.MovementAction;
 import theaterengine.script.statement.Keyword;
 
 /**

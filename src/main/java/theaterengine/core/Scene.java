@@ -1,4 +1,4 @@
-package theaterengine;
+package theaterengine.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,7 @@ import org.checkerframework.checker.units.qual.m;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import theaterengine.gui.StagePanel;
 import theaterengine.script.Parser;
 import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;

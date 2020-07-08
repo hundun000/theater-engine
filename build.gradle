@@ -24,6 +24,9 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:26.0-jre'
 
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.7'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.7'
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     

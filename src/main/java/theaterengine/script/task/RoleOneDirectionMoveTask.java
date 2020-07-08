@@ -3,10 +3,10 @@ package theaterengine.script.task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import theaterengine.MessageBus;
-import theaterengine.Role;
-import theaterengine.RoleFactory;
-import theaterengine.Scene;
+import theaterengine.core.MessageBus;
+import theaterengine.core.Scene;
+import theaterengine.entity.Role;
+import theaterengine.entity.RoleFactory;
 import theaterengine.script.statement.Keyword;
 import theaterengine.script.statement.RoleOneDirectionMoveStatement;
 import theaterengine.script.statement.RoleSpeakStatement;
@@ -59,7 +59,7 @@ public class RoleOneDirectionMoveTask extends ConditionTask {
             int frameMs = 100; 
             double speedPerClock = ScalaTool.meterToPixel(speed/ (1000 / frameMs));
             role.setTarget(targetX, targetY, speedPerClock);
-            System.out.println("role.setTarget");
+            logger.debug("role.setTarget");
             timer.scheduleAtFixedRate(this, 0, frameMs);
             waiting = false;
         }
