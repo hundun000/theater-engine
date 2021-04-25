@@ -11,50 +11,67 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.checkerframework.checker.units.qual.s;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import theaterengine.core.MovementAction;
 import theaterengine.entity.Role;
-import theaterengine.entity.RoleFactory;
 import theaterengine.entity.Screen;
-import theaterengine.entity.ScreenFactory;
 import theaterengine.gui.MainFrame;
 import theaterengine.gui.StagePanel;
+import theaterengine.script.StatementType;
+import theaterengine.script.Token;
 import theaterengine.script.tool.ScalaTool;
 
-public class RoleOneDirectionMoveStatement extends Statement{
+public class RoleOneDirectionMoveStatement extends Statement {
 	private static final Logger logger = LoggerFactory.getLogger(RoleOneDirectionMoveStatement.class);
 	
 	
-	public static List<List<String>> grammars = new ArrayList<>();
+	public static List<List<TokenType>> syntaxs = new ArrayList<>();
 	static {
-		Keyword[] speeds = new Keyword[] {Keyword.ROLE_FAST_SPEED, Keyword.ROLE_MID_SPEED, Keyword.ROLE_SLOW_SPEED};
-		Keyword[] directions = new Keyword[] {Keyword.FORWARD, Keyword.BACKWARD, Keyword.LEFT, Keyword.RIGHT};
-		for (Keyword speed : speeds) {
-			for (Keyword direction : directions) {
-				// （等待 开幕） 哈姆雷特 中速 向前 2
-			    grammars.add(Keyword.getWords(Keyword.VAR, speed, direction, Keyword.VAR));
+		TokenType[] directions = new TokenType[] {TokenType.FORWARD, TokenType.BACKWARD, TokenType.LEFT, TokenType.RIGHT};
+
+			for (TokenType direction : directions) {
+				// （等待 开幕） 哈姆雷特 移速 4 向前 2
+			    syntaxs.add(TokenType.asList(TokenType.USE_ROLE_ID, TokenType.MOVE_WITH_SPEED, TokenType.LITERAL_VALUE, direction, TokenType.LITERAL_VALUE));
 			}
-		}
+
 	}
 	
 
 	
 	
 	public String argName;
-	public String argSpeed;
-	public String argDirection1;
-	public String argDistance1;
+	public double argSpeed;
 	
-	public RoleOneDirectionMoveStatement(List<String> args) {
-		super(args);
+	public Double targetX;
+	public Double targetY;
+	
+	public RoleOneDirectionMoveStatement(List<Token> args) {
+		super(args, StatementType.ROLE_ONE_DIRECTION_MOVE);
 		
-		argName = args.get(0);
-		argSpeed = args.get(1);
-		argDirection1 = args.get(2);
-		argDistance1 = args.get(3);
+		argName = args.get(0).text;
+		argSpeed = Double.parseDouble(args.get(2).text);
+		Token argDirection = args.get(3);
+		double argDistance = Double.parseDouble(args.get(4).text);
+		
+		switch (argDirection.type) {
+        case FORWARD:
+        case BACKWARD:
+            targetX = null;
+            targetY = ScalaTool.meterToPixel(argDistance);
+            break;
+        case LEFT:
+        case RIGHT:
+            targetX = ScalaTool.meterToPixel(argDistance);
+            targetY = null;
+            break;  
+        default:
+            targetX = null;
+            targetY = null;
+            logger.error("argDirection.type = {} 未定义行为", argDirection);
+        }
+		
 	}
 	
 	

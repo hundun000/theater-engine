@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import theaterengine.script.StatementType;
+import theaterengine.script.Token;
+
 /**
  *
  * @author hundun
@@ -11,23 +14,28 @@ import java.util.List;
  */
 public abstract class Statement {
 	
-	protected List<String> args;
-	private String string;
-	public Statement(List<String> args) {
-	    this.string = args.toString();
-		this.args = args;
-	}
 	
-	public Statement(String[] args2) {
-        // TODO Auto-generated constructor stub
-    }
+	public final StatementType type;
+	public int lineNumber;
+    public List<String> doneEvents;
+    public String condition;
+    protected List<Token> tokens;
+	
+	public Statement(List<Token> tokens, StatementType type) {
+	    this.type = type;
+		this.tokens = tokens;
 
-    @Override
-	public String toString() {
-		return string;
 	}
+
 	
-	public List<String> getArgs() {
-        return args;
+	public List<Token> getTokens() {
+        return tokens;
     }
+	
+	
+	
+	
+	
+	
+	
 }

@@ -10,9 +10,13 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
-import theaterengine.Application;
+import theaterengine.StageApplication;
+import theaterengine.core.World;
+import theaterengine.entity.IGameObject;
 import theaterengine.entity.Role;
 import theaterengine.entity.Screen;
 import theaterengine.script.tool.ScalaTool;
@@ -22,93 +26,50 @@ import theaterengine.script.tool.ScalaTool;
  * @author hundun
  * Created on 2019/04/02
  */
-public class StagePanel extends JPanel{
+public class StagePanel extends JPanel {
 	
 	
-	private final List<Role> roles = new ArrayList<>();
-	private final List<Screen> stageScreens = new ArrayList<>();
+	
+	
 	private final MainFrame mainFrame;
+	public World world;
 	
     public StagePanel(MainFrame mainFrame) {
         super();
+        Border blackline = BorderFactory.createLineBorder(Color.black);
+        setBorder(blackline);
+        
         this.mainFrame = mainFrame;
     }
     
-    public void clearStage() {
-    	roles.clear();
-    	stageScreens.clear();
-	}
-    
-    public void addRole(Role role) {
-    	roles.add(role);
-	}
-    
-    public void addScreen(Screen stageScreen) {
-    	stageScreens.add(stageScreen);
-	}
-    Font speakFont = new Font(null, Font.PLAIN, (int) ScalaTool.meterToPixel(0.5));
-    Font fontItemName = new Font(null, Font.PLAIN, (int) ScalaTool.meterToPixel(0.3));
-    private void drawScreen(Graphics2D g2d, Screen stageScreen) {
-    	g2d.setColor(Color.GRAY);
-        g2d.drawRect((int)stageScreen.getX() - stageScreen.getWidth()/2, (int)stageScreen.getY(), stageScreen.getWidth(), stageScreen.getHeight());
-        
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect((int)stageScreen.getX() - stageScreen.getWidth()/2, (int)stageScreen.getY(), stageScreen.getWidth(), stageScreen.getHeight());
 
-        g2d.setColor(Color.BLACK);
-        g2d.setFont(fontItemName);
-        g2d.drawString(stageScreen.getName(), (int)stageScreen.getX() - fontItemName.getSize(), (int)stageScreen.getY() + stageScreen.getHeight() + fontItemName.getSize());
-        
-    }
     
     
-    private void drawRole(Graphics2D g2d, Role role) {
+    public static Font speakFont = new Font(null, Font.PLAIN, (int) ScalaTool.meterToPixel(0.5));
+    public static Font fontItemName = new Font(null, Font.PLAIN, (int) ScalaTool.meterToPixel(0.3));
 
-        
-        g2d.setColor(Color.BLACK);
-        g2d.drawOval((int)role.getX() - Role.radius, (int)role.getY() - Role.radius, 2 * Role.radius, 2 * Role.radius);
-
-        g2d.setColor(Color.GRAY);
-        g2d.fillOval((int)role.getX() - Role.radius, (int)role.getY() - Role.radius, 2 * Role.radius, 2 * Role.radius);
-
-        g2d.setColor(Color.BLACK);
-        g2d.setFont(fontItemName);
-        
-        int roleX = (int) (role.getX() - Role.radius + 0.2 * fontItemName.getSize());
-        int roleY = (int) (role.getY() + 0.5 * fontItemName.getSize());
-        
-        
-        g2d.drawString(role.getName(), roleX, roleY);
-        
-        if (role.getSpeaking().length() != 0) {
-            String text = role.getName() + " : " + role.getSpeaking();
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(speakFont);
-            int speakX = Application.stagePanelWidth / 2 - text.length() * speakFont.getSize() / 2;
-            int speakY = Application.stagePanelHeight - speakFont.getSize();
-            g2d.drawString(text, speakX, speakY);
-        }
-        
-        
-    }
+    
 	
 	@Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        drawGrids(g2d, (int) ScalaTool.meterToPixel(1));
+        this.drawGrids(g2d, (int) ScalaTool.meterToPixel(1));
         
-        for (Role role : roles) {
-        	drawRole(g2d, role);
+        if (world != null) {
+            String timerText = "updateCounter: " + world.updateCounter + "(frames), " + "renderCounter: " + world.renderCounter + "(frames).";
+            this.drawString(g2d, timerText, 0, (int) ScalaTool.meterToPixel(7.5));
+            
+            for (Role role : world.roles.values()) {
+                role.renderGame(g2d, world);
+            }
+            
+            for (Screen stageScreen : world.stageScreens.values()) {
+                stageScreen.renderGame(g2d, world);
+            }
         }
-        
-        for (Screen stageScreen : stageScreens) {
-        	drawScreen(g2d, stageScreen);
-        }
-        
         
         
         g2d.dispose();
@@ -264,20 +225,18 @@ public class StagePanel extends JPanel{
     /**
      * 6. 文本
      */
-    private void drawString(Graphics g) {
+    private void drawString(Graphics2D g2d, String text, int x, int y) {
         //mainFrame.setTitle("6. 文本");
-        Graphics2D g2d = (Graphics2D) g.create();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // 设置字体样式, null 表示使用默认字体, Font.PLAIN 为普通样式, 大小为 25px
         g2d.setFont(new Font(null, Font.PLAIN, 10));
-
+        g2d.setColor(Color.BLACK);
         // 绘制文本, 其中坐标参数指的是文本绘制后的 左下角 的位置
         // 首次绘制需要初始化字体, 可能需要较耗时
-        g2d.drawString("Hello World!", 20, 60);
-        g2d.drawString("你好, 世界!", 20, 120);
+        g2d.drawString(text, x, y);
 
-        g2d.dispose();
     }
+
 }

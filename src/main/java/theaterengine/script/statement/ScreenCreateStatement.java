@@ -3,11 +3,13 @@ package theaterengine.script.statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import theaterengine.Application;
+import theaterengine.StageApplication;
+import theaterengine.core.World;
 import theaterengine.entity.Screen;
-import theaterengine.entity.ScreenFactory;
 import theaterengine.gui.MainFrame;
 import theaterengine.gui.StagePanel;
+import theaterengine.script.StatementType;
+import theaterengine.script.Token;
 import theaterengine.script.tool.ScalaTool;
 
 /**
@@ -17,33 +19,38 @@ import theaterengine.script.tool.ScalaTool;
  */
 public class ScreenCreateStatement extends Statement {
 
-	public static List<List<String>> grammars = new ArrayList<>();
+	public static List<List<TokenType>> syntaxs = new ArrayList<>();
 	static {
 		// 创建幕布 A 宽 1.5 向前 0.8 向左 0.75
-		grammars.add(Keyword.getWords(Keyword.CREATE_SCREEN, Keyword.VAR, Keyword.WIDTH, Keyword.VAR, Keyword.FORWARD, Keyword.VAR, Keyword.LEFT, Keyword.VAR));
-		grammars.add(Keyword.getWords(Keyword.CREATE_SCREEN, Keyword.VAR, Keyword.WIDTH, Keyword.VAR, Keyword.FORWARD, Keyword.VAR, Keyword.RIGHT, Keyword.VAR));
-		grammars.add(Keyword.getWords(Keyword.CREATE_SCREEN, Keyword.VAR, Keyword.WIDTH, Keyword.VAR, Keyword.BACKWARD, Keyword.VAR, Keyword.LEFT, Keyword.VAR));
-		grammars.add(Keyword.getWords(Keyword.CREATE_SCREEN, Keyword.VAR, Keyword.WIDTH, Keyword.VAR, Keyword.BACKWARD, Keyword.VAR, Keyword.RIGHT, Keyword.VAR));
+		syntaxs.add(TokenType.asList(TokenType.CREATE_SCREEN, TokenType.LITERAL_VALUE, TokenType.WIDTH, TokenType.LITERAL_VALUE, TokenType.FORWARD, TokenType.LITERAL_VALUE, TokenType.LEFT, TokenType.LITERAL_VALUE));
+		syntaxs.add(TokenType.asList(TokenType.CREATE_SCREEN, TokenType.LITERAL_VALUE, TokenType.WIDTH, TokenType.LITERAL_VALUE, TokenType.FORWARD, TokenType.LITERAL_VALUE, TokenType.RIGHT, TokenType.LITERAL_VALUE));
+		syntaxs.add(TokenType.asList(TokenType.CREATE_SCREEN, TokenType.LITERAL_VALUE, TokenType.WIDTH, TokenType.LITERAL_VALUE, TokenType.BACKWARD, TokenType.LITERAL_VALUE, TokenType.LEFT, TokenType.LITERAL_VALUE));
+		syntaxs.add(TokenType.asList(TokenType.CREATE_SCREEN, TokenType.LITERAL_VALUE, TokenType.WIDTH, TokenType.LITERAL_VALUE, TokenType.BACKWARD, TokenType.LITERAL_VALUE, TokenType.RIGHT, TokenType.LITERAL_VALUE));
 	}
 	
-
+	public String id;
 	
-	public ScreenCreateStatement(List<String> args2) {
-		super(args2);
+	double dy;
+	double dx;
+	int screenWidth;
+	
+	public ScreenCreateStatement(List<Token> args2) {
+		super(args2, StatementType.SCREEN_CTEATE);
+		this.id = tokens.get(1).text;
+		
+		this.screenWidth = (int) ScalaTool.meterToPixel(Double.parseDouble(tokens.get(3).text));
+        this.dy = tokens.get(4).type.getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(tokens.get(5).text));
+        this.dx = tokens.get(6).type.getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(tokens.get(7).text));
+        
 	}
 	
-	public void work(StagePanel stagePanel) {
-		String name = args.get(1);
-		int screenWidth = (int) ScalaTool.meterToPixel(Double.parseDouble(args.get(3)));
-		double dy = Keyword.get(args.get(4)).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(args.get(5)));
-		double dx = Keyword.get(args.get(6)).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(args.get(7)));
+	public void work(World world) {
 		
-		double x = dx + Application.positionZeroX;
-		double y = dy + Application.positionZeroY;
+		double x = dx + StageApplication.positionZeroX;
+		double y = dy + StageApplication.positionZeroY;
 		
 		
-		ScreenFactory.registerAndAddToStage(new Screen(name, x, y, screenWidth), stagePanel);
-		stagePanel.updateUI();
+		world.addScreen(new Screen(id, x, y, screenWidth));
 	}
 
 }

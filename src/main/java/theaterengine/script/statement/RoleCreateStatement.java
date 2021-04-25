@@ -3,13 +3,14 @@ package theaterengine.script.statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import theaterengine.Application;
+import theaterengine.StageApplication;
+import theaterengine.core.World;
 import theaterengine.entity.Role;
-import theaterengine.entity.RoleFactory;
 import theaterengine.entity.Screen;
-import theaterengine.entity.ScreenFactory;
 import theaterengine.gui.MainFrame;
 import theaterengine.gui.StagePanel;
+import theaterengine.script.StatementType;
+import theaterengine.script.Token;
 import theaterengine.script.tool.ScalaTool;
 
 /**
@@ -19,14 +20,14 @@ import theaterengine.script.tool.ScalaTool;
  */
 public class RoleCreateStatement extends Statement {
 
-	public static List<List<String>> grammars = new ArrayList<>();
+	public static List<List<TokenType>> syntaxs = new ArrayList<>();
 	static {
-		Keyword[] directionXs = new Keyword[] {Keyword.LEFT, Keyword.RIGHT};
-		Keyword[] directionYs = new Keyword[] {Keyword.FORWARD, Keyword.BACKWARD};
-		for (Keyword directionX : directionXs) {
-			for (Keyword directionY : directionYs) {
+		TokenType[] directionXs = new TokenType[] {TokenType.LEFT, TokenType.RIGHT};
+		TokenType[] directionYs = new TokenType[] {TokenType.FORWARD, TokenType.BACKWARD};
+		for (TokenType directionX : directionXs) {
+			for (TokenType directionY : directionYs) {
 				// 创建角色 哈姆雷特 向前 0 向左 1
-				grammars.add(Keyword.getWords(Keyword.CREATE_ROLE, Keyword.VAR, directionY, Keyword.VAR, directionX, Keyword.VAR));
+				syntaxs.add(TokenType.asList(TokenType.CREATE_ROLE, TokenType.LITERAL_VALUE, directionY, TokenType.LITERAL_VALUE, directionX, TokenType.LITERAL_VALUE));
 			}
 		}
 	}
@@ -36,32 +37,31 @@ public class RoleCreateStatement extends Statement {
 	
 	
 	
-	String argName;
-	String argDirectionY;
-	String argDistanceY;
-	String argDirectionX;
-	String argDistanceX;
+	public String argId;
+	int argDirectionY;
+	double argDistanceY;
+	int argDirectionX;
+	double argDistanceX;
 	
-	public RoleCreateStatement(List<String> args) {
-		super(args);
-		argName = args.get(1);
-		argDirectionY = args.get(2);
-		argDistanceY = args.get(3);
-		argDirectionX = args.get(4);
-		argDistanceX = args.get(5);
+	public RoleCreateStatement(List<Token> args) {
+		super(args, StatementType.ROLE_CTEATE);
+		argId = args.get(1).text;
+		argDirectionY = args.get(2).type.getIntValue();
+		argDistanceY = Double.parseDouble(args.get(3).text);
+		argDirectionX = args.get(4).type.getIntValue();
+		argDistanceX = Double.parseDouble(args.get(5).text);
 	}
 	
-	public void work(StagePanel stagePanel) {
+	public void work(World world) {
 		
-		double dy = Keyword.get(argDirectionY).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(argDistanceY));
-		double dx = Keyword.get(argDirectionX).getIntValue() * ScalaTool.meterToPixel(Double.parseDouble(argDistanceX));
+		double dy = argDirectionY * ScalaTool.meterToPixel(argDistanceY);
+		double dx = argDirectionX * ScalaTool.meterToPixel(argDistanceX);
 		
-		double x = dx + Application.positionZeroX;
-		double y = dy + Application.positionZeroY;
+		double x = dx + StageApplication.positionZeroX;
+		double y = dy + StageApplication.positionZeroY;
 		
 		
-		RoleFactory.registerAndAddToStage(new Role(argName, x, y), stagePanel);
-		stagePanel.updateUI();
+		world.addRole(new Role(argId, x, y));
 	}
 
 }

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,13 +41,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import theaterengine.core.MessageBus;
-import theaterengine.core.Scene;
+import theaterengine.core.World;
 import theaterengine.script.Parser;
 import theaterengine.script.StatementType;
 import theaterengine.script.statement.DelayStatement;
 import theaterengine.script.statement.RoleCreateStatement;
 import theaterengine.script.statement.RoleOneDirectionMoveStatement;
-import theaterengine.script.statement.RoleSpeakStatement;
+import theaterengine.script.statement.RoleTalkStatement;
 import theaterengine.script.statement.ScreenCreateStatement;
 import theaterengine.script.tool.FileTool;
 import theaterengine.script.tool.ScalaTool;
@@ -66,32 +67,44 @@ public class MainFrame extends JFrame{
     private String scriptFilename;
 	JPanel panelEdit;
 	JTextArea textAreaCode;
-	Scene scene;
+	World world;
 	StagePanel stagePanel;
-	Parser parser;
+	
 	
 	private void initUI(int width, int height) {
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    //置窗口是否可以关闭
         
         int panelEditWidth = 400;
-        int buttonRunWidth = 300;
-        int buttonRunHeight = 50;
+        int buttonPrepareWidth = 150;
+        int buttonStartWidth = 150;
+        int buttonSaveWidth = 100;
+        int buttonHeight = 50;
         panelEdit = new JPanel();
         panelEdit.setBounds(0, 0, panelEditWidth, height);
         
         textAreaCode = new JTextArea();
         JScrollPane scrollPaneCode = new JScrollPane(textAreaCode);
-        scrollPaneCode.setBounds(0, 0, panelEditWidth, height - buttonRunHeight);
+        scrollPaneCode.setBounds(0, 0, panelEditWidth, height - buttonHeight);
         
-        JButton buttonRun = new JButton("运行");
-        buttonRun.addActionListener(new ActionListener() {
+        JButton buttonPrepare = new JButton("准备");
+        buttonPrepare.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<String> docs = Arrays.asList(textAreaCode.getText().split("\n"));
-                restart(docs);
+                world.prepare(stagePanel, docs);
             }
         });
-        buttonRun.setBounds(0, height - buttonRunHeight, buttonRunWidth, buttonRunHeight);
+        buttonPrepare.setBounds(0, height - buttonHeight, buttonPrepareWidth, buttonHeight);
+        
+        JButton buttonStart = new JButton("开始");
+        buttonStart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                world.start();
+            }
+        });
+        buttonStart.setBounds(buttonPrepareWidth, height - buttonHeight, buttonStartWidth, buttonHeight);
+        
         
         JButton buttonSave = new JButton("保存");
         buttonSave.addActionListener(new ActionListener() {
@@ -105,11 +118,12 @@ public class MainFrame extends JFrame{
                 }
             }
         });
-        buttonSave.setBounds(buttonRunWidth, height - buttonRunHeight, panelEditWidth - buttonRunWidth, buttonRunHeight);
+        buttonSave.setBounds(buttonPrepareWidth + buttonStartWidth, height - buttonHeight, buttonSaveWidth, buttonHeight);
         
         panelEdit.setLayout(null);
         panelEdit.add(scrollPaneCode);
-        panelEdit.add(buttonRun);
+        panelEdit.add(buttonPrepare);
+        panelEdit.add(buttonStart);
         panelEdit.add(buttonSave);
         
         stagePanel = new StagePanel(this);
@@ -125,9 +139,12 @@ public class MainFrame extends JFrame{
         
         setVisible(true);    //设置窗口是否可见
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        this.world = new World();
     }
 	
-	public void loadScript(String scriptFilename) {
+	public void loadScriptIntoTextbox(String scriptFilename) {
 	    this.scriptFilename = scriptFilename;
         InputStreamReader reader;
         try {
@@ -152,32 +169,10 @@ public class MainFrame extends JFrame{
 		
 		initUI(width, height);
 		
-		parser = new Parser();
-        parser.registerGrammars(DelayStatement.grammars, StatementType.DELAY);
-        parser.registerGrammars(ScreenCreateStatement.grammars, StatementType.SCREEN_CTEATE);
-        parser.registerGrammars(RoleCreateStatement.grammars, StatementType.ROLE_CTEATE);
-        parser.registerGrammars(RoleOneDirectionMoveStatement.grammars, StatementType.ROLE_ONE_DIRECTION_MOVE);
-        parser.registerGrammars(RoleSpeakStatement.grammars, StatementType.ROLE_SPEAK);
-        
-	}
-	
-	
-	
-	public void restart(List<String> docs) {
-		if (scene != null) {
-			scene.cancel();
-		}
-		
 		
         
-        stagePanel.clearStage();
-        
-        scene = new Scene(stagePanel, docs, parser);
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(scene, 0, 100);
-        
-        MessageBus.reset();
 	}
+
 	
 	
 	
